@@ -36,6 +36,7 @@ import { DataTablePagination } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ITeams } from "@/lib/data.placeholder";
 import { useAddTeams } from "@/hooks/use-add-teams";
+import { SearchBar } from "@/components/ui/search-bar";
 
 export type UsersData = {
   id?: string;
@@ -57,7 +58,7 @@ export function TableTeams({ data, columns, pageCount }: TableUsersProps) {
   const searchParams = useSearchParams();
 
   const page = searchParams?.get("page") ?? "1";
-  const per_page = searchParams?.get("per_page") ?? "1";
+  const per_page = searchParams?.get("per_page") ?? "10";
 
   const modal = useAddTeams();
 
@@ -154,14 +155,7 @@ export function TableTeams({ data, columns, pageCount }: TableUsersProps) {
           <PlusIcon className="hidden md:block w-5 h-5 mr-1" />
           Add Team
         </Button>
-        <Input
-          placeholder="Filter names..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <SearchBar />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
