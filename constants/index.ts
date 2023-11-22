@@ -158,3 +158,26 @@ export const openingHours = [
     time: "10 AM - 9 PM",
   },
 ];
+
+export const sideBar = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: "/layout-dashboard.svg",
+  },
+  {
+    title: "Teams",
+    href: "/dashboard/teams",
+    icon: "/users-2.svg",
+  },
+  {
+    title: "Gallery",
+    href: "/dashboard/gallery",
+    icon: "/image.svg",
+  },
+  {
+    title: "Products",
+    href: "/dashboard/products",
+    icon: "/layout-list.svg",
+  },
+];

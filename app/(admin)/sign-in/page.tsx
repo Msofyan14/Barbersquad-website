@@ -17,8 +17,7 @@ import { Input } from "@/components/ui/input";
 import { FormLoginValidation } from "@/lib/validations/types";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/lib/actions/users.actions";
-import { fetchToken } from "@/lib/actions/tokenClient";
+import Image from "next/image";
 
 type LoginTypes = z.infer<typeof FormLoginValidation>;
 
@@ -35,12 +34,6 @@ function SignIn() {
 
   const onSubmit: SubmitHandler<LoginTypes> = async (data) => {
     try {
-      // const signIn =
-
-      // await loginUser(data);
-
-      // return signIn;
-
       const login = await signIn("credentials", {
         ...data,
         redirect: false,
@@ -58,53 +51,70 @@ function SignIn() {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-4xl mx-auto mt-36"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <>
-                  <Input placeholder="email" {...field} />
-                  {form.formState.errors.password && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.email?.message}
-                    </p>
-                  )}
-                </>
-              </FormControl>
-            </FormItem>
-          )}
+    <section className="h-screen p-10 flex flex-col justify-center rounded-lg border">
+      <div className="">
+        <Image
+          className="mx-auto my-8"
+          src="/logo.svg"
+          width={100}
+          height={100}
+          alt="logo"
         />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 max-w-xl mx-auto  "
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <>
+                      <Input placeholder="email" {...field} />
+                      {form.formState.errors.password && (
+                        <p className="text-sm text-red-500">
+                          {form.formState.errors.email?.message}
+                        </p>
+                      )}
+                    </>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <>
-                  <Input type="password" placeholder="password" {...field} />
-                  {form.formState.errors.password && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.password?.message}
-                    </p>
-                  )}
-                </>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <>
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                      />
+                      {form.formState.errors.password && (
+                        <p className="text-sm text-red-500">
+                          {form.formState.errors.password?.message}
+                        </p>
+                      )}
+                    </>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button className="w-full " type="submit">
+              Login
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </section>
   );
 }
 

@@ -48,16 +48,3 @@ export async function getUserByEmail(email: string) {
     throw new Error(`Failed to retrieve user : ${error.message}`);
   }
 }
-
-export async function loginUser(data: LoginTypes) {
-  try {
-    await signIn("credentials", data);
-  } catch (error: any) {
-    // if ((error as Error).message.includes("CredentialsSignin")) {
-    //   return "CredentialSignin";
-    // }
-    // throw error;
-    const errorMessage = error.message || "Failed to login user";
-    throw new Error(errorMessage);
-  }
-}

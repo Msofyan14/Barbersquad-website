@@ -1,5 +1,6 @@
-import { initialUsers } from "./lib/data.placeholder";
+import { initialTeams, initialUsers } from "./lib/data.placeholder";
 import Users from "./lib/model/users.model";
+import Teams from "./lib/model/teams.model";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
@@ -8,9 +9,7 @@ dotenv.config({ path: __dirname + "/.env" });
 // console.log(process.env.MONGODB_URI);
 
 mongoose
-  .connect(
-    "mongodb+srv://yanzsofyan:yanzsofyan97@cluster0.dko9n1j.mongodb.net/barbersquad"
-  )
+  .connect(`${process.env.MONGODB_URL}`)
   .then(() => console.log("DB Connected"))
   .catch((error) => console.log("DB Connection Failed", error.message));
 
@@ -20,6 +19,7 @@ const importData = async () => {
   try {
     // delete previous data | avoid duplication
     await Users.deleteMany();
+    await Teams.deleteMany();
 
     for (const userData of initialUsers) {
       const hashedPassword = await bcrypt.hash(userData.password, 8);
@@ -27,6 +27,7 @@ const importData = async () => {
     }
 
     await Users.insertMany(initialUsers);
+    await Teams.insertMany(initialTeams);
 
     console.log("Data imported");
 

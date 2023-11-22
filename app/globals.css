@@ -93,3 +93,15 @@
 .section-wrapper {
   @apply max-w-[1440px] mx-auto px-6 lg:px-20 lg:mb-[80px];
 }
+
+.bottombar {
+  @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-neutral-950 p-4  sm:px-6 md:hidden;
+}
+
+.bottombar_container {
+  @apply flex items-center justify-between gap-3 sm:gap-5;
+}
+
+.bottombar_link {
+  @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+}

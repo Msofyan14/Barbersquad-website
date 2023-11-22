@@ -2,7 +2,7 @@
 
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["mongoose"], // <-- and this
+    serverComponentsExternalPackages: ["mongoose"],
   },
 };
 
