@@ -7,7 +7,7 @@ export default async function Teams({
   searchParams: { [key: string]: string | undefined };
 }) {
   const page = searchParams?.page ? +searchParams.page : 1;
-  const limit = searchParams?.per_page ? +searchParams.per_page : 1;
+  const limit = searchParams?.per_page ? +searchParams.per_page : 10;
 
   const teams = await getTeams({
     searchString: searchParams.search,
@@ -15,11 +15,16 @@ export default async function Teams({
     pageSize: limit,
   });
 
+  const teamsWithStringIds = teams.data.map((team) => ({
+    ...team._doc,
+    _id: team._id.toString(),
+  }));
+
   return (
     <div className="p-5 ">
       <div className="">
         <ColumnTeams
-          data={teams.data}
+          data={teamsWithStringIds}
           page={page}
           limit={limit}
           pageCount={teams.pageCount}

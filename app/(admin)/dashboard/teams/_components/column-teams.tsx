@@ -7,15 +7,16 @@ import React, { useEffect } from "react";
 import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import { TableTeams } from "./table-teams";
 import { ITeams } from "@/lib/data.placeholder";
+import Image from "next/image";
 
-interface ColumnsProps {
+interface IColumns {
   page: number;
   limit: number;
   data: ITeams[];
   pageCount?: number;
 }
 
-export const ColumnTeams = ({ page, limit, data, pageCount }: ColumnsProps) => {
+export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
   // const modal = useEditModal();
   // const userDataById = useUserDataById();
   // const usersData = useUsersData();
@@ -75,6 +76,20 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: ColumnsProps) => {
         header: "Whatsapp",
         cell: ({ row }) => (
           <div className="capitalize">{row.getValue("whatsapp")}</div>
+        ),
+      },
+      {
+        accessorKey: "image",
+        header: "Image",
+        cell: ({ row }) => (
+          <div className="">
+            <Image
+              src={row.getValue("image")}
+              height={50}
+              width={50}
+              alt="profile"
+            />
+          </div>
         ),
       },
 
