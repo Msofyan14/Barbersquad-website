@@ -10,6 +10,6 @@ const gallerySchema = new mongoose.Schema({
 });
 
 const Gallery =
-  mongoose.models.User || mongoose.model("Gallery", gallerySchema);
+  mongoose.models.Gallery || mongoose.model("Gallery", gallerySchema);
 
 export default Gallery;

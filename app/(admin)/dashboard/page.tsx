@@ -15,10 +15,11 @@ async function Dashboard() {
 
   return (
     <div>
-      <NavbarDashboard />
       Dashboard
       <p className="mt-40">{currentUser?.email}</p>
-      {currentUser?.role === "admin" && <Button>Add Products</Button>}
+      {currentUser?.role === "admin" && (
+        <Button className="">Add Products</Button>
+      )}
     </div>
   );
 }
