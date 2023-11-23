@@ -23,7 +23,7 @@ interface ICurrentUser {
 
 export function NavbarDashboard({ currentUser }: ICurrentUser) {
   return (
-    <div className=" bg-neutral-950 w-full py-3 md:py-5 px-5 md:px-10 flex justify-between md:justify-end items-center  ">
+    <div className=" bg-neutral-950 w-full py-3 md:py-5 px-5 md:px-10 flex justify-between md:justify-end items-center fixed z-10 left-0  ">
       <div className="flex justify-center gap-x-2 items-center   md:hidden ">
         <Image src="/logo.svg" width={40} height={40} alt="logo" />
         <h1 className={`${alice.className} text-xl text-neutral-50`}>

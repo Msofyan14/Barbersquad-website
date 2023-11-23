@@ -15,16 +15,11 @@ export default async function Teams({
     pageSize: limit,
   });
 
-  const teamsWithStringIds = teams.data.map((team) => ({
-    ...team._doc,
-    _id: team._id.toString(),
-  }));
-
   return (
-    <div className="p-5 ">
-      <div className="">
+    <div className="p-5  ">
+      <div className="mt-10 md:mt-20 overflow-y-auto pb-20">
         <ColumnTeams
-          data={teamsWithStringIds}
+          data={teams.data}
           page={page}
           limit={limit}
           pageCount={teams.pageCount}

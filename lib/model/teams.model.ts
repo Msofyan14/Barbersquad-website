@@ -16,7 +16,7 @@ const barberSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      requred: true,
+      required: true,
     },
   },
   {

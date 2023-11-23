@@ -14,7 +14,7 @@ import {
 
 interface ConfirmDialogProps {
   children: React.ReactNode;
-  onConfirm?: () => void;
+  onConfirm: () => void;
 }
 
 export function ConfirmDialog({ children, onConfirm }: ConfirmDialogProps) {
@@ -22,7 +22,7 @@ export function ConfirmDialog({ children, onConfirm }: ConfirmDialogProps) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    // onConfirm();
+    onConfirm();
   };
 
   return (
