@@ -33,7 +33,7 @@ import { Loader2 } from "lucide-react";
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
 
 export default function ModalEditTeams() {
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | undefined>(undefined);
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
@@ -52,7 +52,7 @@ export default function ModalEditTeams() {
 
   useEffect(() => {
     form.reset(userData);
-    setFile(userData?.image);
+    setFile(userData?.image!);
   }, [userData]);
 
   const onClose = () => {
@@ -60,23 +60,12 @@ export default function ModalEditTeams() {
     form.reset();
     modal.onClose();
   };
+  console.log(file);
 
   const onSubmit: SubmitHandler<TeamsValidation> = async (data) => {
     try {
-      if (file) {
-        const res = await edgestore.publicFiles.upload({
-          file,
-          options: {
-            replaceTargetUrl: userData?.image,
-          },
-        });
-
-        const payload = {
-          ...data,
-          image: res.url,
-        };
-
-        const parsedPayload = FormTeamsValidation.safeParse(payload);
+      if (file === userData?.image) {
+        const parsedPayload = FormTeamsValidation.safeParse(data);
 
         if (parsedPayload.success) {
           await editTeam({
@@ -87,36 +76,46 @@ export default function ModalEditTeams() {
             toast.success("Success edit team");
           });
         }
+      } else {
+        if (file) {
+          const res = await edgestore.publicFiles.upload({
+            file,
+            options: {
+              replaceTargetUrl: userData?.image,
+            },
+          });
+
+          if (!res) {
+            toast.error("Failed to upload image");
+            return;
+          }
+
+          const payload = {
+            ...data,
+            image: res.url,
+          };
+
+          console.log(payload);
+
+          const parsedPayload = FormTeamsValidation.safeParse(payload);
+
+          if (parsedPayload.success) {
+            await editTeam({
+              id: userData?._id,
+              data: parsedPayload.data,
+              pathname: pathname,
+            }).then(() => {
+              toast.success("Success edit team");
+            });
+          }
+        }
       }
-
-      //   else {
-      //     const payload = {
-      //       ...data,
-      //       image: userData?.image,
-      //     };
-
-      //     console.log(payload);
-
-      //     const parsedPayload = FormTeamsValidation.safeParse(payload);
-
-      //     if (parsedPayload.success) {
-      //       await editTeam({
-      //         id: userData?._id,
-      //         data: parsedPayload.data,
-      //         pathname: pathname,
-      //       }).then(() => {
-      //         toast.success("Success edit team");
-      //       });
-      //     }
-      //   }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
       onClose();
     }
   };
-
-  console.log(file);
 
   return (
     <div>
