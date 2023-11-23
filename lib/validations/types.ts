@@ -20,5 +20,6 @@ export const FormTeamsValidation = z.object({
     .min(1, { message: "Email is required" })
     .max(30, { message: "Maximum 30 Characters" }),
   whatsapp: z.coerce.number().min(10, { message: "Minimum 10 Characters" }),
-  image: z.string().min(1, { message: "Image is required" }),
+  // image: z.string().min(1, { message: "Image is required" }),
+  image: z.string(),
 });
