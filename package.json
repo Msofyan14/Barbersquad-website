@@ -10,6 +10,8 @@
     "data:import": "ts-node --project tsconfig.seeder.json seeder.ts"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.4",
+    "@edgestore/server": "^0.1.4",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -29,6 +31,7 @@
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.48.2",
     "sonner": "^1.2.0",
     "swiper": "^11.0.4",

@@ -3,7 +3,6 @@
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -17,39 +16,44 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 
-import { useAddTeams } from "@/hooks/use-add-teams";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { z } from "zod";
 import { FormTeamsValidation } from "@/lib/validations/types";
 import { SingleImageDropzone } from "../single-image-dropzone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { toast } from "sonner";
-import { addTeams } from "@/lib/actions/teams.action";
+import { editTeam } from "@/lib/actions/teams.action";
 import { usePathname } from "next/navigation";
+import { useEditTeams } from "@/hooks/use-image-team";
 import { Loader2 } from "lucide-react";
 
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
 
-export default function ModalAddTeams() {
+export default function ModalEditTeams() {
   const [file, setFile] = useState<File>();
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
+  const modal = useEditTeams();
+  const { userData } = useEditTeams();
 
   const form = useForm<TeamsValidation>({
     resolver: zodResolver(FormTeamsValidation),
     defaultValues: {
-      name: "",
-      email: "",
-      whatsapp: 62,
-      image: "",
+      name: userData?.name || "",
+      email: userData?.email || "",
+      whatsapp: userData?.whatsapp || 62,
+      image: userData?.image || "",
     },
   });
 
-  const modal = useAddTeams();
+  useEffect(() => {
+    form.reset(userData);
+    setFile(userData?.image);
+  }, [userData]);
 
   const onClose = () => {
     setFile(undefined);
@@ -62,6 +66,9 @@ export default function ModalAddTeams() {
       if (file) {
         const res = await edgestore.publicFiles.upload({
           file,
+          options: {
+            replaceTargetUrl: userData?.image,
+          },
         });
 
         const payload = {
@@ -72,17 +79,44 @@ export default function ModalAddTeams() {
         const parsedPayload = FormTeamsValidation.safeParse(payload);
 
         if (parsedPayload.success) {
-          await addTeams(parsedPayload.data, pathname).then(() => {
-            toast.success("Success add team");
+          await editTeam({
+            id: userData?._id,
+            data: parsedPayload.data,
+            pathname: pathname,
+          }).then(() => {
+            toast.success("Success edit team");
           });
         }
       }
+
+      //   else {
+      //     const payload = {
+      //       ...data,
+      //       image: userData?.image,
+      //     };
+
+      //     console.log(payload);
+
+      //     const parsedPayload = FormTeamsValidation.safeParse(payload);
+
+      //     if (parsedPayload.success) {
+      //       await editTeam({
+      //         id: userData?._id,
+      //         data: parsedPayload.data,
+      //         pathname: pathname,
+      //       }).then(() => {
+      //         toast.success("Success edit team");
+      //       });
+      //     }
+      //   }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
       onClose();
     }
   };
+
+  console.log(file);
 
   return (
     <div>

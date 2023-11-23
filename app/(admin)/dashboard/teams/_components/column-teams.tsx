@@ -8,6 +8,10 @@ import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import { TableTeams } from "./table-teams";
 import { ITeams } from "@/lib/data.placeholder";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { deleteTeam, editTeam, getTeamByid } from "@/lib/actions/teams.action";
+import { toast } from "sonner";
+import { useEditTeams } from "@/hooks/use-image-team";
 
 interface IColumns {
   page: number;
@@ -17,22 +21,28 @@ interface IColumns {
 }
 
 export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
-  // const modal = useEditModal();
-  // const userDataById = useUserDataById();
-  // const usersData = useUsersData();
+  const pathname = usePathname();
+  const modal = useEditTeams();
 
-  // const onSubmit = async (id: number) => {
-  //   const userById = await getUserById(id);
-  //   userDataById.setUserData(userById);
-  //   modal.onOpen();
-  // };
+  const handleGetTeamById = async (id: string) => {
+    try {
+      modal.onOpen();
+      const res = await getTeamByid(id);
+      modal.setUserData(res);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
-  // const { data: users } = getUsers(page, limit);
-  // const { mutate: deleteUser } = onDeleteUser();
-
-  // useEffect(() => {
-  //   usersData.setUserData(users.data);
-  // }, [users.data]);
+  const onDelete = async (id: string) => {
+    try {
+      await deleteTeam(id, pathname).then(() => {
+        toast.success("Succes delete team");
+      });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const columns = React.useMemo<ColumnDef<ITeams>[]>(() => {
     return [
@@ -87,6 +97,7 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
               src={row.getValue("image")}
               height={50}
               width={50}
+              className="object-cover"
               alt="profile"
             />
           </div>
@@ -94,22 +105,19 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
       },
 
       {
-        accessorKey: "action",
+        accessorKey: "_id",
         header: "Action",
         cell: ({ row }) => (
           <div className="capitalize flex gap-x-2">
             <Button
-              // onClick={() => {
-              //   onSubmit(row.getValue("id"));
-              // }}
+              onClick={() => {
+                handleGetTeamById(row.getValue("_id"));
+              }}
               size="sm"
             >
               Edit
             </Button>
-            <ConfirmDialog
-
-            // onConfirm={() => deleteUser(row.getValue("id"))}
-            >
+            <ConfirmDialog onConfirm={() => onDelete(row.getValue("_id"))}>
               <Button size="sm">Delete</Button>
             </ConfirmDialog>
           </div>
