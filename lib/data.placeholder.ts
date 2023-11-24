@@ -1,15 +1,4 @@
-interface IUsers {
-  email: string;
-  name: string;
-  password: string;
-}
-
-export interface ITeams {
-  name: string;
-  email: string;
-  whatsapp: number;
-  image: string;
-}
+import { IProducts, ITeams, IUsers } from "@/types";
 
 export const initialUsers: IUsers[] = [
   {
@@ -55,5 +44,22 @@ export const initialTeams: ITeams[] = [
     email: "yogayk@gmail.com",
     whatsapp: 6289769281282,
     image: "/model.png",
+  },
+];
+
+export const intialProducts: IProducts[] = [
+  {
+    name: "Pomade",
+    price: 80000,
+    description:
+      "Elevate your hairstyling game with our Premium Hold Pomade, a grooming essential for the modern, style-conscious individual. Crafted with precision, our pomade is designed to provide a stronghold with a touch of flexibility, allowing you to experiment with a range of hairstyles.",
+    images: ["/product.png", "/product.png", "/product.png", "/product.png"],
+  },
+  {
+    name: "Clay",
+    price: 80000,
+    description:
+      "Elevate your hairstyling game with our Premium Hold Pomade, a grooming essential for the modern, style-conscious individual. Crafted with precision, our pomade is designed to provide a stronghold with a touch of flexibility, allowing you to experiment with a range of hairstyles.",
+    images: ["/product.png", "/product.png", "/product.png", "/product.png"],
   },
 ];

@@ -35,20 +35,20 @@ import { DataTablePagination } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAddTeams } from "@/hooks/use-add-teams";
 import { SearchBar } from "@/components/ui/search-bar";
-import { ITeams } from "@/types";
+import { IProducts } from "@/types";
 
 interface TableUsersProps {
-  data: ITeams[];
+  data: IProducts[];
   pageCount?: number;
-  columns: ColumnDef<ITeams>[];
+  columns: ColumnDef<IProducts>[];
 }
-export function TableTeams({ data, columns, pageCount }: TableUsersProps) {
+export function TableProducts({ data, columns, pageCount }: TableUsersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const page = searchParams?.get("page") ?? "1";
-  const per_page = searchParams?.get("per_page") ?? "5";
+  const per_page = searchParams?.get("per_page") ?? "10";
 
   const modal = useAddTeams();
 
@@ -201,7 +201,7 @@ export function TableTeams({ data, columns, pageCount }: TableUsersProps) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell className="" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

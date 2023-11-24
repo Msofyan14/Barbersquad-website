@@ -21,8 +21,8 @@ type InputProps = {
   width?: number;
   height?: number;
   className?: string;
-  value?: File | string | undefined;
-  onChange?: (file?: File | string | undefined) => void | Promise<void>;
+  value?: File;
+  onChange?: (file?: File) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
 };

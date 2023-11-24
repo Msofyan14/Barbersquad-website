@@ -4,6 +4,7 @@ import { FilterQuery } from "mongoose";
 import Teams from "../model/teams.model";
 import { connectToDB } from "../mongoose";
 import { revalidatePath } from "next/cache";
+import { ITeams } from "@/types";
 
 type TGetTeams = {
   searchString?: string;
@@ -60,15 +61,7 @@ export async function getTeams({
   }
 }
 
-export type TDataTeam = {
-  _id?: string | undefined;
-  name: string;
-  email: string;
-  whatsapp: number;
-  image: string;
-};
-
-export async function addTeams(data: TDataTeam, pathname: string) {
+export async function addTeams(data: ITeams, pathname: string) {
   try {
     connectToDB();
 
@@ -111,7 +104,7 @@ export async function getTeamByid(id: string) {
 
 type TEditTeams = {
   id: string | undefined;
-  data: TDataTeam;
+  data: ITeams;
   pathname: string;
 };
 

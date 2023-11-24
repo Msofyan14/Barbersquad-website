@@ -1,28 +1,30 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+// import { TableUsers, UsersData } from "@/components/table-users";
 import { ArrowUpDown } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ConfirmDialog } from "@/components/modal/confirm-modal";
-import { TableTeams } from "./table-teams";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { deleteTeam, getTeamByid } from "@/lib/actions/teams.action";
+import { deleteTeam, editTeam, getTeamByid } from "@/lib/actions/teams.action";
 import { toast } from "sonner";
 import { useEditTeams } from "@/hooks/use-image-team";
+import { TableProducts } from "./table-products";
 import { useEdgeStore } from "@/lib/edgestore";
-import { ITeams } from "@/types";
+import { IProducts } from "@/types";
 
 interface IColumns {
   page: number;
   limit: number;
-  data: ITeams[];
+  data: IProducts[];
   pageCount?: number;
 }
 
-export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
+export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
   const modal = useEditTeams();
+
   const { edgestore } = useEdgeStore();
 
   const handleGetTeamById = async (id: string) => {
@@ -37,11 +39,9 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
 
   const onDelete = async (id: string, imgUrl: string) => {
     try {
-      if (imgUrl) {
-        await edgestore.publicFiles.delete({
-          url: imgUrl,
-        });
-      }
+      await edgestore.publicFiles.delete({
+        url: imgUrl,
+      });
 
       await deleteTeam(id, pathname).then(() => {
         toast.success("Succes delete team");
@@ -51,7 +51,7 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
     }
   };
 
-  const columns = React.useMemo<ColumnDef<ITeams>[]>(() => {
+  const columns = React.useMemo<ColumnDef<IProducts>[]>(() => {
     return [
       {
         accessorKey: "no",
@@ -70,43 +70,38 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
         ),
       },
       {
-        accessorKey: "email",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Email
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
+        accessorKey: "price",
+        header: "Price",
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("email")}</div>
+          <div className="capitalize">Rp. {row.getValue("price")}</div>
         ),
       },
       {
-        accessorKey: "whatsapp",
-        header: "Whatsapp",
+        accessorKey: "description",
+        header: "Description",
         cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("whatsapp")}</div>
+          <div className="capitalize max-w-sm max-sm:truncate">
+            {row.getValue("description")}
+          </div>
         ),
       },
       {
-        accessorKey: "image",
-        header: "Image",
+        accessorKey: "images",
+        header: "Images",
         cell: ({ row }) => (
           <div className="">
-            <Image
-              src={row.getValue("image")}
-              height={50}
-              width={50}
-              className="object-cover"
-              alt="profile"
-            />
+            <div className="grid grid-cols-2 gap-2 md:gap-4 ">
+              {row.original.images.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  height={80}
+                  width={80}
+                  className="object-cover w-full"
+                  alt="profile"
+                />
+              ))}
+            </div>
           </div>
         ),
       },
@@ -137,5 +132,5 @@ export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
     ];
   }, [page]);
 
-  return <TableTeams data={data} columns={columns} pageCount={pageCount} />;
+  return <TableProducts data={data} columns={columns} pageCount={pageCount} />;
 };
