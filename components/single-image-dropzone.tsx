@@ -1,5 +1,6 @@
 "use client";
 
+import { useEditTeams } from "@/hooks/use-image-team";
 import { UploadCloudIcon, X } from "lucide-react";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
@@ -20,8 +21,8 @@ type InputProps = {
   width?: number;
   height?: number;
   className?: string;
-  value?: File | string;
-  onChange?: (file?: File) => void | Promise<void>;
+  value?: File | string | undefined;
+  onChange?: (file?: File | string | undefined) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
 };
