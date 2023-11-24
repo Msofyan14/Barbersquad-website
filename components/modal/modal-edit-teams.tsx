@@ -33,7 +33,7 @@ import { Loader2 } from "lucide-react";
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
 
 export default function ModalEditTeams() {
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [file, setFile] = useState<File | string | undefined>();
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
@@ -52,7 +52,7 @@ export default function ModalEditTeams() {
 
   useEffect(() => {
     form.reset(userData);
-    setFile(userData?.image!);
+    setFile(userData?.image);
   }, [userData]);
 
   const onClose = () => {
@@ -60,7 +60,6 @@ export default function ModalEditTeams() {
     form.reset();
     modal.onClose();
   };
-  console.log(file);
 
   const onSubmit: SubmitHandler<TeamsValidation> = async (data) => {
     try {
@@ -95,8 +94,6 @@ export default function ModalEditTeams() {
             image: res.url,
           };
 
-          console.log(payload);
-
           const parsedPayload = FormTeamsValidation.safeParse(payload);
 
           if (parsedPayload.success) {
@@ -122,7 +119,7 @@ export default function ModalEditTeams() {
       <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
         <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Add Your Teams</SheetTitle>
+            <SheetTitle>Edit Your Teams</SheetTitle>
           </SheetHeader>
           <Form {...form}>
             <form
@@ -207,7 +204,8 @@ export default function ModalEditTeams() {
                           value={file}
                           onChange={(file) => {
                             setFile(file);
-                            form.setValue("image", file?.name!);
+                            // @ts-ignore
+                            form.setValue("image", file);
                           }}
                         />
                         {form.formState.errors.image && (

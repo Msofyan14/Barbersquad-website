@@ -119,9 +119,6 @@ export async function editTeam({ id, data, pathname }: TEditTeams) {
   try {
     connectToDB();
 
-    console.log(id);
-    console.log(data);
-
     const editTeam = await Teams.findByIdAndUpdate({ _id: id }, data);
 
     if (!editTeam) {
