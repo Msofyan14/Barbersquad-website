@@ -33,27 +33,28 @@ import { Loader2 } from "lucide-react";
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
 
 export default function ModalEditTeams() {
-  const [file, setFile] = useState<File | string | undefined>();
+  const [file, setFile] = useState<File | undefined>();
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
   const modal = useEditTeams();
-  const { userData } = useEditTeams();
+  const { teamByid } = useEditTeams();
 
   const form = useForm<TeamsValidation>({
     resolver: zodResolver(FormTeamsValidation),
     defaultValues: {
-      name: userData?.name || "",
-      email: userData?.email || "",
-      whatsapp: userData?.whatsapp || 62,
-      image: userData?.image || "",
+      name: teamByid?.name || "",
+      email: teamByid?.email || "",
+      whatsapp: teamByid?.whatsapp || 62,
+      image: teamByid?.image || "",
     },
   });
 
   useEffect(() => {
-    form.reset(userData);
-    setFile(userData?.image);
-  }, [userData]);
+    form.reset(teamByid);
+    // @ts-ignore
+    setFile(teamByid?.image);
+  }, [teamByid]);
 
   const onClose = () => {
     setFile(undefined);
@@ -63,12 +64,12 @@ export default function ModalEditTeams() {
 
   const onSubmit: SubmitHandler<TeamsValidation> = async (data) => {
     try {
-      if (file === userData?.image) {
+      if (file === teamByid?.image) {
         const parsedPayload = FormTeamsValidation.safeParse(data);
 
         if (parsedPayload.success) {
           await editTeam({
-            id: userData?._id,
+            id: teamByid?._id,
             data: parsedPayload.data,
             pathname: pathname,
           }).then(() => {
@@ -80,7 +81,7 @@ export default function ModalEditTeams() {
           const res = await edgestore.publicFiles.upload({
             file,
             options: {
-              replaceTargetUrl: userData?.image,
+              replaceTargetUrl: teamByid?.image,
             },
           });
 
@@ -98,7 +99,7 @@ export default function ModalEditTeams() {
 
           if (parsedPayload.success) {
             await editTeam({
-              id: userData?._id,
+              id: teamByid?._id,
               data: parsedPayload.data,
               pathname: pathname,
             }).then(() => {
@@ -117,7 +118,10 @@ export default function ModalEditTeams() {
   return (
     <div>
       <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
-        <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
+        <SheetContent
+          side={"bottom"}
+          className="h-[80%] overflow-y-auto transition duration-300"
+        >
           <SheetHeader>
             <SheetTitle>Edit Your Teams</SheetTitle>
           </SheetHeader>
@@ -204,8 +208,7 @@ export default function ModalEditTeams() {
                           value={file}
                           onChange={(file) => {
                             setFile(file);
-                            // @ts-ignore
-                            form.setValue("image", file);
+                            form.setValue("image", file?.name!);
                           }}
                         />
                         {form.formState.errors.image && (
@@ -227,10 +230,10 @@ export default function ModalEditTeams() {
                 {form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                    Submitting
+                    Editing
                   </>
                 ) : (
-                  "Submit"
+                  "Edit"
                 )}
               </Button>
             </form>

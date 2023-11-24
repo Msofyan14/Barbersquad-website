@@ -12,6 +12,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { toast } from "sonner";
+
 interface ConfirmDialogProps {
   children: React.ReactNode;
   onConfirm: () => void;
@@ -21,8 +23,12 @@ export function ConfirmDialog({ children, onConfirm }: ConfirmDialogProps) {
   const handleConfirm = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.stopPropagation();
-    onConfirm();
+    try {
+      e.stopPropagation();
+      onConfirm();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
