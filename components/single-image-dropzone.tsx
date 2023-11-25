@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditTeams } from "@/hooks/use-image-team";
+import { useEditTeams } from "@/hooks/use-edit-team";
 import { UploadCloudIcon, X } from "lucide-react";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";

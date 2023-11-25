@@ -10,7 +10,7 @@ export function SideBar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex flex-col gap-y-2 w-fit bg-neutral-950 px-3 h-screen sticky left-0 top-0 z-20 border-r-2 max-md:hidden ">
+    <aside className="flex flex-col gap-y-2 w-fit bg-neutral-950 px-3 h-screen sticky left-0 top-0 z-20 border-r-2 max-lg:hidden ">
       <div className="flex justify-center gap-x-2 items-center border-b-2 py-3 px-8 ">
         <Image src="/logo.svg" width={50} height={50} alt="logo" />
         <h1 className={`${alice.className} text-2xl text-neutral-50`}>

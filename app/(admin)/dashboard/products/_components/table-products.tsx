@@ -33,9 +33,9 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useAddTeams } from "@/hooks/use-add-teams";
 import { SearchBar } from "@/components/ui/search-bar";
 import { IProducts } from "@/types";
+import { useAddProducts } from "@/hooks/use-add-products";
 
 interface TableUsersProps {
   data: IProducts[];
@@ -50,7 +50,7 @@ export function TableProducts({ data, columns, pageCount }: TableUsersProps) {
   const page = searchParams?.get("page") ?? "1";
   const per_page = searchParams?.get("per_page") ?? "10";
 
-  const modal = useAddTeams();
+  const modal = useAddProducts();
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -143,7 +143,7 @@ export function TableProducts({ data, columns, pageCount }: TableUsersProps) {
           className="mr-2 whitespace-nowrap"
         >
           <PlusIcon className="hidden md:block w-5 h-5 mr-1" />
-          Add Team
+          Add Product
         </Button>
         <SearchBar />
         <DropdownMenu>

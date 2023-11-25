@@ -27,7 +27,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { toast } from "sonner";
 import { editTeam } from "@/lib/actions/teams.action";
 import { usePathname } from "next/navigation";
-import { useEditTeams } from "@/hooks/use-image-team";
+import { useEditTeams } from "@/hooks/use-edit-team";
 import { Loader2 } from "lucide-react";
 
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
