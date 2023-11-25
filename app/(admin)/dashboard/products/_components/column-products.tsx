@@ -9,7 +9,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { deleteTeam, editTeam, getTeamByid } from "@/lib/actions/teams.action";
 import { toast } from "sonner";
-import { useEditTeams } from "@/hooks/use-image-team";
+import { useEditTeams } from "@/hooks/use-edit-team";
 import { TableProducts } from "./table-products";
 import { useEdgeStore } from "@/lib/edgestore";
 import { IProducts } from "@/types";
@@ -57,7 +57,7 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
         accessorKey: "no",
         header: "No",
         cell: ({ row }) => (
-          <div className="capitalize">
+          <div className="capitalize max-md:text-xs">
             {+page === 1 ? row.index + 1 : (+page - 1) * limit + row.index + 1}
           </div>
         ),
@@ -66,21 +66,25 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("name")}</div>
+          <div className="capitalize max-md:text-xs">
+            {row.getValue("name")}
+          </div>
         ),
       },
       {
         accessorKey: "price",
         header: "Price",
         cell: ({ row }) => (
-          <div className="capitalize">Rp. {row.getValue("price")}</div>
+          <div className="capitalize max-md:text-xs">
+            Rp. {row.getValue("price")}
+          </div>
         ),
       },
       {
         accessorKey: "description",
         header: "Description",
         cell: ({ row }) => (
-          <div className="capitalize max-w-sm max-sm:truncate">
+          <div className="max-w-xl  max-lg:truncate max-md:text-xs">
             {row.getValue("description")}
           </div>
         ),
@@ -110,7 +114,7 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
         accessorKey: "_id",
         header: "Action",
         cell: ({ row }) => (
-          <div className="capitalize flex gap-x-2">
+          <div className="capitalize flex gap-x-2 justify-center">
             <Button
               onClick={() => {
                 handleGetTeamById(row.getValue("_id"));

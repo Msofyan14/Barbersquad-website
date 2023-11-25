@@ -9,7 +9,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { deleteTeam, getTeamByid } from "@/lib/actions/teams.action";
 import { toast } from "sonner";
-import { useEditTeams } from "@/hooks/use-image-team";
+import { useEditTeams } from "@/hooks/use-edit-team";
 import { useEdgeStore } from "@/lib/edgestore";
 import { ITeams } from "@/types";
 

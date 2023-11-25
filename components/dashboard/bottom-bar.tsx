@@ -23,7 +23,7 @@ export function BottomBar() {
               }`}
             >
               <Image src={link.icon} width={24} height={24} alt="icon" />
-              <p className="text-neutral-50  max-sm:hidden">
+              <p className="text-neutral-50 text-sm  max-sm:hidden">
                 {link.title.split(/\s+/)[0]}
               </p>
             </Link>

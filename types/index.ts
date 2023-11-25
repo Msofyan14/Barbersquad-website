@@ -5,7 +5,7 @@ export interface IUsers {
 }
 
 export interface ITeams {
-  _id?: string | undefined;
+  // _id?: string | undefined;
   name: string;
   email: string;
   whatsapp: number;
@@ -13,7 +13,7 @@ export interface ITeams {
 }
 
 export interface IProducts {
-  _id?: string | undefined;
+  // _id?: string | undefined;
   name: string;
   price: number;
   description: string;

@@ -95,7 +95,7 @@
 }
 
 .bottombar {
-  @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-neutral-950 p-4  sm:px-6 md:hidden;
+  @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-neutral-950 p-4  sm:px-6 lg:hidden;
 }
 
 .bottombar_container {

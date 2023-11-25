@@ -3,6 +3,7 @@ import { connectToDB } from "../mongoose";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 import Products from "../model/products.model";
+import { IProducts } from "@/types";
 
 type TGetTeams = {
   searchString?: string;
@@ -54,6 +55,25 @@ export async function getProducts({
     return { data, pageCount };
   } catch (error: any) {
     const errorMessage = error.message || "Failed to get teams ";
+    throw new Error(errorMessage);
+  }
+}
+
+export async function addProduct(data: IProducts, pathname: string) {
+  try {
+    connectToDB();
+
+    const newProduct = await Products.create(data);
+
+    if (!newProduct) {
+      throw new Error("Failed to add Product");
+    }
+
+    await newProduct.save();
+
+    revalidatePath(pathname);
+  } catch (error: any) {
+    const errorMessage = error.message || "Failed to add Product ";
     throw new Error(errorMessage);
   }
 }
