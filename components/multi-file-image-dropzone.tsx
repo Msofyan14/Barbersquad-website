@@ -159,9 +159,9 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           {value?.map(({ file, progress }, i) => (
             <div
               key={i}
-              className="flex h-16 w-full max-w-[100vw] flex-col justify-center rounded border border-gray-300 px-4 py-2"
+              className="flex h-16 w-96 max-w-[100vw] flex-col justify-center rounded border border-gray-300 px-4 py-2"
             >
-              <div className="flex items-center gap-2 text-gray-500 dark:text-white ">
+              <div className="flex items-center gap-2 text-gray-500 dark:text-white">
                 <FileIcon size="30" className="shrink-0" />
                 <div className="min-w-0 text-sm">
                   <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -176,7 +176,8 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
                   {progress === "PENDING" ? (
                     <button
                       className="rounded-md p-1 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         void onChange?.(
                           value.filter((_, index) => index !== i)
                         );

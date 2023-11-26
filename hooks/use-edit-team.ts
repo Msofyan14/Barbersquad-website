@@ -1,7 +1,7 @@
 import { ITeams } from "@/types";
 import { create } from "zustand";
 
-type TImageTeams = {
+type TEditTeamsStore = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
@@ -9,7 +9,7 @@ type TImageTeams = {
   setUserData: (value: ITeams) => void;
 };
 
-export const useEditTeams = create<TImageTeams>((set) => ({
+export const useEditTeams = create<TEditTeamsStore>((set) => ({
   teamByid: undefined,
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
