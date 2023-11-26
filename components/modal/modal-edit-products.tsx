@@ -60,19 +60,17 @@ export default function ModalEditProducts() {
     form.reset(productById);
     // @ts-ignore
 
-    // const productImages = productById?.images || [];
+    const productImages = productById?.images || [];
 
-    // const fileStatesFromImages = productImages.map((imageUrl) => ({
-    //   file: undefined,
-    //   url: imageUrl,
-    //   key: Math.random().toString(36).slice(2),
-    //   progress: "PENDING",
-    // }));
+    const fileStatesFromImages = productImages.map((imageUrl) => ({
+      file: undefined,
+      url: imageUrl,
+      key: Math.random().toString(36).slice(2),
+      progress: "PENDING",
+    }));
 
-    // // @ts-ignore
-    // setFileStates(fileStatesFromImages);
-
-    // setFileStates(productById?.images);
+    // @ts-ignore
+    setFileStates(fileStatesFromImages);
   }, [productById]);
 
   function updateFileProgress(key: string, progress: FileState["progress"]) {
