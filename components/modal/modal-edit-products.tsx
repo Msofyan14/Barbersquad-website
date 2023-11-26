@@ -26,32 +26,54 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MultiFileDropzone,
   type FileState,
 } from "@/components/multi-file-image-dropzone";
 import { FormProductsValidation } from "@/lib/validations/types";
-import { useAddProducts } from "@/hooks/use-add-products";
 import { addProduct } from "@/lib/actions/products.action";
+import { useEditProducts } from "@/hooks/use-edit-products";
 
 type ProductValidation = z.infer<typeof FormProductsValidation>;
 
-export default function ModalAddProducts() {
+export default function ModalEditProducts() {
+  const { productById, isOpen, onClose } = useEditProducts();
+
   const form = useForm<ProductValidation>({
     resolver: zodResolver(FormProductsValidation),
     defaultValues: {
-      name: "",
-      price: 0,
-      description: "",
-      images: [""],
+      name: productById?.name || "",
+      price: productById?.price || 0,
+      description: productById?.description || "",
+      images: productById?.images || [""],
     },
   });
+
   const [fileStates, setFileStates] = useState<FileState[]>([]);
 
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    form.reset(productById);
+    // @ts-ignore
+
+    // const productImages = productById?.images || [];
+
+    // const fileStatesFromImages = productImages.map((imageUrl) => ({
+    //   file: undefined,
+    //   url: imageUrl,
+    //   key: Math.random().toString(36).slice(2),
+    //   progress: "PENDING",
+    // }));
+
+    // // @ts-ignore
+    // setFileStates(fileStatesFromImages);
+
+    // setFileStates(productById?.images);
+  }, [productById]);
 
   function updateFileProgress(key: string, progress: FileState["progress"]) {
     setFileStates((fileStates) => {
@@ -65,11 +87,10 @@ export default function ModalAddProducts() {
       return newFileStates;
     });
   }
-  const modal = useAddProducts();
 
-  const onClose = () => {
+  const handleOnClose = () => {
     form.reset();
-    modal.onClose();
+    onClose();
   };
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
@@ -113,13 +134,13 @@ export default function ModalAddProducts() {
     } catch (error: any) {
       toast.error(error.message);
     } finally {
-      onClose();
+      handleOnClose();
     }
   };
 
   return (
     <div>
-      <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
+      <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Add Your Teams</SheetTitle>
@@ -190,6 +211,7 @@ export default function ModalAddProducts() {
               />
 
               <FormField
+                control={form.control}
                 name="images"
                 render={({ field }) => (
                   <FormItem>
@@ -198,6 +220,7 @@ export default function ModalAddProducts() {
                       <>
                         <div className="">
                           <MultiFileDropzone
+                            {...field}
                             className="w-full"
                             value={fileStates}
                             dropzoneOptions={{

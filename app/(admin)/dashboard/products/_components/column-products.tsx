@@ -1,18 +1,17 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-// import { TableUsers, UsersData } from "@/components/table-users";
-import { ArrowUpDown } from "lucide-react";
 import React, { useEffect } from "react";
 import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { deleteTeam, editTeam, getTeamByid } from "@/lib/actions/teams.action";
+import { deleteTeam } from "@/lib/actions/teams.action";
 import { toast } from "sonner";
-import { useEditTeams } from "@/hooks/use-edit-team";
 import { TableProducts } from "./table-products";
 import { useEdgeStore } from "@/lib/edgestore";
 import { IProducts } from "@/types";
+import { useEditProducts } from "@/hooks/use-edit-products";
+import { deleteProduct, getProductByid } from "@/lib/actions/products.action";
 
 interface IColumns {
   page: number;
@@ -23,28 +22,36 @@ interface IColumns {
 
 export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
-  const modal = useEditTeams();
+  const { setProducts, onOpen } = useEditProducts();
 
   const { edgestore } = useEdgeStore();
 
-  const handleGetTeamById = async (id: string) => {
+  const handleGetProductById = async (id: string) => {
     try {
-      modal.onOpen();
-      const res = await getTeamByid(id);
-      modal.setUserData(res);
+      onOpen();
+      const res = await getProductByid(id);
+      setProducts(res);
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
-  const onDelete = async (id: string, imgUrl: string) => {
+  const onDelete = async (id: string, imgUrl: string[]) => {
     try {
-      await edgestore.publicFiles.delete({
-        url: imgUrl,
-      });
+      await Promise.all(
+        imgUrl.map(async (img) => {
+          try {
+            await edgestore.publicFiles.delete({
+              url: img,
+            });
+          } catch (error: any) {
+            toast.error(error.message);
+          }
+        })
+      );
 
-      await deleteTeam(id, pathname).then(() => {
-        toast.success("Succes delete team");
+      await deleteProduct(id, pathname).then(() => {
+        toast.success("Succes delete product");
       });
     } catch (error: any) {
       toast.error(error.message);
@@ -117,7 +124,7 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
           <div className="capitalize flex gap-x-2 justify-center">
             <Button
               onClick={() => {
-                handleGetTeamById(row.getValue("_id"));
+                handleGetProductById(row.getValue("_id"));
               }}
               size="sm"
             >
@@ -125,7 +132,7 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
             </Button>
             <ConfirmDialog
               onConfirm={() =>
-                onDelete(row.getValue("_id"), row.getValue("image"))
+                onDelete(row.getValue("_id"), row.getValue("images"))
               }
             >
               <Button size="sm">Delete</Button>

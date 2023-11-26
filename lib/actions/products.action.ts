@@ -59,6 +59,28 @@ export async function getProducts({
   }
 }
 
+export async function getProductByid(id: string) {
+  try {
+    connectToDB();
+
+    const getTeam = await Products.findOne({ _id: id }, { __v: 0 });
+
+    if (!getTeam) {
+      throw new Error("Failed to retrieve products");
+    }
+
+    return {
+      ...getTeam._doc,
+      _id: getTeam._id.toString(),
+      createdAt: getTeam.createdAt.toISOString(),
+      updatedAt: getTeam.updatedAt.toISOString(),
+    };
+  } catch (error: any) {
+    const errorMessage = error.message || "Failed  retrieve products ";
+    throw new Error(errorMessage);
+  }
+}
+
 export async function addProduct(data: IProducts, pathname: string) {
   try {
     connectToDB();
@@ -74,6 +96,22 @@ export async function addProduct(data: IProducts, pathname: string) {
     revalidatePath(pathname);
   } catch (error: any) {
     const errorMessage = error.message || "Failed to add Product ";
+    throw new Error(errorMessage);
+  }
+}
+
+export async function deleteProduct(id: string, pathname: string) {
+  try {
+    connectToDB();
+
+    const deleteTeam = await Products.findOneAndDelete({ _id: id });
+
+    if (!deleteTeam) {
+      throw new Error("Failed delete product");
+    }
+    revalidatePath(pathname);
+  } catch (error: any) {
+    const errorMessage = error.message || "Failed  delete product ";
     throw new Error(errorMessage);
   }
 }
