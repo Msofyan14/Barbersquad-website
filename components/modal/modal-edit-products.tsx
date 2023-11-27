@@ -26,13 +26,13 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MultiFileDropzone,
   type FileState,
 } from "@/components/multi-file-image-dropzone";
 import { FormProductsValidation } from "@/lib/validations/types";
-import { addProduct } from "@/lib/actions/products.action";
+import { addProduct, editProduct } from "@/lib/actions/products.action";
 import { useEditProducts } from "@/hooks/use-edit-products";
 
 type ProductValidation = z.infer<typeof FormProductsValidation>;
@@ -63,7 +63,7 @@ export default function ModalEditProducts() {
     const productImages = productById?.images || [];
 
     const fileStatesFromImages = productImages.map((imageUrl) => ({
-      file: undefined,
+      file: null,
       url: imageUrl,
       key: Math.random().toString(36).slice(2),
       progress: "PENDING",
@@ -90,44 +90,121 @@ export default function ModalEditProducts() {
     form.reset();
     onClose();
   };
+  const fileToReplace = fileStates.map((filestate) => filestate.file);
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     try {
-      const uploadedImage = await Promise.all(
-        fileStates.map(async (fileState) => {
-          try {
-            if (fileState.progress !== "PENDING") return;
-            const res = await edgestore.publicFiles.upload({
-              file: fileState.file,
-              onProgressChange: async (progress: any) => {
-                updateFileProgress(fileState.key, progress);
-                if (progress === 100) {
-                  // wait 1 second to set it to complete
-                  // so that the user can see the progress bar
-                  await new Promise((resolve) => setTimeout(resolve, 1000));
-                  updateFileProgress(fileState.key, "COMPLETE");
-                }
-              },
-            });
+      const urlImage = fileStates.map((file) => file.url);
+      const existImage = productById?.images;
 
-            return res.url;
-          } catch (err) {
-            updateFileProgress(fileState.key, "ERROR");
-          }
-        })
-      );
+      const isEqual =
+        urlImage.length === existImage?.length &&
+        urlImage.every((value, index) => value === existImage[index]);
 
-      const payload = {
-        ...data,
-        images: uploadedImage,
-      };
+      if (isEqual) {
+        const parsedPayload = FormProductsValidation.safeParse(data);
+        if (parsedPayload.success) {
+          await editProduct({
+            id: productById?._id,
+            data: parsedPayload.data,
+            pathname: pathname,
+          }).then(() => {
+            toast.success("Success Edit product");
+          });
+        }
+      } else if (isEqual && !!fileToReplace) {
+        const editedImage = await Promise.all(
+          fileStates.map(async (fileState, index) => {
+            try {
+              if (fileState.progress !== "PENDING") return;
 
-      const parsedPayload = FormProductsValidation.safeParse(payload);
+              const res = await edgestore.publicFiles.upload({
+                file: fileState.file,
 
-      if (parsedPayload.success) {
-        await addProduct(parsedPayload.data, pathname).then(() => {
-          toast.success("Success add products");
-        });
+                onProgressChange: async (progress: any) => {
+                  updateFileProgress(fileState.key, progress);
+                  if (progress === 100) {
+                    // wait 1 second to set it to complete
+                    // so that the user can see the progress bar
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    updateFileProgress(fileState.key, "COMPLETE");
+                  }
+                },
+              });
+
+              return res.url;
+            } catch (err) {
+              updateFileProgress(fileState.key, "ERROR");
+            }
+          })
+        );
+
+        const payload = {
+          ...data,
+          images: [...existImage, ...editedImage],
+        };
+
+        const parsedPayload = FormProductsValidation.safeParse(payload);
+
+        if (parsedPayload.success) {
+          await editProduct({
+            id: productById?._id,
+            data: parsedPayload.data,
+            pathname: pathname,
+          }).then(() => {
+            toast.success("Success Edit products");
+          });
+        }
+      } else {
+        const editedImage = await Promise.all(
+          fileStates.map(async (fileState, index) => {
+            try {
+              if (fileState.progress !== "PENDING") return;
+
+              const targetUrltoReplace =
+                existImage && existImage.length > index
+                  ? existImage[index]
+                  : undefined;
+
+              const res = await edgestore.publicFiles.upload({
+                file: fileState.file,
+                options: {
+                  replaceTargetUrl: targetUrltoReplace,
+                },
+                onProgressChange: async (progress: any) => {
+                  updateFileProgress(fileState.key, progress);
+                  if (progress === 100) {
+                    // wait 1 second to set it to complete
+                    // so that the user can see the progress bar
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    updateFileProgress(fileState.key, "COMPLETE");
+                  }
+                },
+              });
+
+              return res.url;
+            } catch (err) {
+              updateFileProgress(fileState.key, "ERROR");
+            }
+          })
+        );
+
+        const payload = {
+          ...data,
+          images: editedImage,
+        };
+
+        const parsedPayload = FormProductsValidation.safeParse(payload);
+
+        if (parsedPayload.success) {
+          await editProduct({
+            id: productById?._id,
+            data: parsedPayload.data,
+            pathname: pathname,
+          }).then(() => {
+            toast.success("Success Edit products");
+          });
+        }
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -135,6 +212,8 @@ export default function ModalEditProducts() {
       handleOnClose();
     }
   };
+
+  console.log(fileStates);
 
   return (
     <div>
