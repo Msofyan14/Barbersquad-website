@@ -121,8 +121,6 @@ export async function editTeam({ id, data, pathname }: TEditTeams) {
     await editTeam.save();
 
     revalidatePath(pathname);
-
-    return deleteTeam;
   } catch (error: any) {
     const errorMessage = error.message || "Failed  edit team ";
     throw new Error(errorMessage);
@@ -139,8 +137,6 @@ export async function deleteTeam(id: string, pathname: string) {
       throw new Error("Failed delete team");
     }
     revalidatePath(pathname);
-
-    return deleteTeam;
   } catch (error: any) {
     const errorMessage = error.message || "Failed  delete team ";
     throw new Error(errorMessage);

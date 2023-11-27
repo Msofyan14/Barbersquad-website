@@ -100,6 +100,33 @@ export async function addProduct(data: IProducts, pathname: string) {
   }
 }
 
+type TEditProduct = {
+  id: string | undefined;
+  data: IProducts;
+  pathname: string;
+};
+
+export async function editProduct({ id, data, pathname }: TEditProduct) {
+  console.log(data);
+
+  try {
+    connectToDB();
+
+    const editProduct = await Products.findByIdAndUpdate({ _id: id }, data);
+
+    if (!editProduct) {
+      throw new Error("Failed edit team");
+    }
+
+    await editProduct.save();
+
+    revalidatePath(pathname);
+  } catch (error: any) {
+    const errorMessage = error.message || "Failed  edit team ";
+    throw new Error(errorMessage);
+  }
+}
+
 export async function deleteProduct(id: string, pathname: string) {
   try {
     connectToDB();
