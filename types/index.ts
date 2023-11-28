@@ -19,3 +19,8 @@ export interface IProducts {
   description: string;
   images: string[];
 }
+
+export interface IGallery {
+  _id?: string | undefined;
+  images: string[];
+}

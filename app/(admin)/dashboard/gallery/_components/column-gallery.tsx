@@ -6,11 +6,11 @@ import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
-import { TableProducts } from "./table-products";
 import { useEdgeStore } from "@/lib/edgestore";
 import { IProducts } from "@/types";
 import { useEditProducts } from "@/hooks/use-edit-products";
 import { deleteProduct, getProductByid } from "@/lib/actions/products.actions";
+import { TableGallery } from "./table-gallery";
 
 interface IColumns {
   page: number;
@@ -19,7 +19,7 @@ interface IColumns {
   pageCount?: number;
 }
 
-export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
+export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
   const { setProducts, onOpen } = useEditProducts();
 
@@ -69,38 +69,11 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
         ),
       },
       {
-        accessorKey: "name",
-        header: "Name",
-        cell: ({ row }) => (
-          <div className="capitalize max-md:text-xs">
-            {row.getValue("name")}
-          </div>
-        ),
-      },
-      {
-        accessorKey: "price",
-        header: "Price",
-        cell: ({ row }) => (
-          <div className="capitalize max-md:text-xs">
-            Rp. {row.getValue("price")}
-          </div>
-        ),
-      },
-      {
-        accessorKey: "description",
-        header: "Description",
-        cell: ({ row }) => (
-          <div className="max-w-xl  max-lg:truncate max-md:text-xs">
-            {row.getValue("description")}
-          </div>
-        ),
-      },
-      {
         accessorKey: "images",
         header: "Images",
         cell: ({ row }) => (
           <div className="">
-            <div className="grid grid-cols-2 gap-2 md:gap-4 ">
+            <div className="flex justify-center items-center gap-x-2 ">
               {row.original.images.map((image, index) => (
                 <Image
                   key={index}
@@ -142,5 +115,5 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
     ];
   }, [page]);
 
-  return <TableProducts data={data} columns={columns} pageCount={pageCount} />;
+  return <TableGallery data={data} columns={columns} pageCount={pageCount} />;
 };

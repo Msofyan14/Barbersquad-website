@@ -25,7 +25,7 @@ import { SingleImageDropzone } from "../single-image-dropzone";
 import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { toast } from "sonner";
-import { editTeam } from "@/lib/actions/teams.action";
+import { editTeam } from "@/lib/actions/teams.actions";
 import { usePathname } from "next/navigation";
 import { useEditTeams } from "@/hooks/use-edit-team";
 import { Loader2 } from "lucide-react";

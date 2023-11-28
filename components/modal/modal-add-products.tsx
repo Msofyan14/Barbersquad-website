@@ -33,7 +33,7 @@ import {
 } from "@/components/multi-file-image-dropzone";
 import { FormProductsValidation } from "@/lib/validations/types";
 import { useAddProducts } from "@/hooks/use-add-products";
-import { addProduct } from "@/lib/actions/products.action";
+import { addProduct } from "@/lib/actions/products.actions";
 
 type ProductValidation = z.infer<typeof FormProductsValidation>;
 

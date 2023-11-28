@@ -1,4 +1,4 @@
-import { getTeams } from "@/lib/actions/teams.action";
+import { getTeams } from "@/lib/actions/teams.actions";
 import { ColumnTeams } from "./_components/column-teams";
 
 export default async function Teams({

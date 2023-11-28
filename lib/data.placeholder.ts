@@ -1,4 +1,4 @@
-import { IProducts, ITeams, IUsers } from "@/types";
+import { IGallery, IProducts, ITeams, IUsers } from "@/types";
 
 export const initialUsers: IUsers[] = [
   {
@@ -61,5 +61,20 @@ export const intialProducts: IProducts[] = [
     description:
       "Elevate your hairstyling game with our Premium Hold Pomade, a grooming essential for the modern, style-conscious individual. Crafted with precision, our pomade is designed to provide a stronghold with a touch of flexibility, allowing you to experiment with a range of hairstyles.",
     images: ["/product.png", "/product.png", "/product.png", "/product.png"],
+  },
+];
+
+export const initialGallery: IGallery[] = [
+  {
+    images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
+  },
+  {
+    images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
+  },
+  {
+    images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
+  },
+  {
+    images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
   },
 ];

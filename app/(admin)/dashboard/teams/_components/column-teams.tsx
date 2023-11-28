@@ -7,7 +7,7 @@ import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import { TableTeams } from "./table-teams";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { deleteTeam, getTeamByid } from "@/lib/actions/teams.action";
+import { deleteTeam, getTeamByid } from "@/lib/actions/teams.actions";
 import { toast } from "sonner";
 import { useEditTeams } from "@/hooks/use-edit-team";
 import { useEdgeStore } from "@/lib/edgestore";
