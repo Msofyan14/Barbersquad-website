@@ -91,21 +91,34 @@ export default function ModalEditProducts() {
     onClose();
   };
 
+  // const existImage = productById?.images;
+
+  // console.log(existImage);
+
   const currentImage = fileStates
     .filter((file) => file.url !== undefined)
     .map((link) => link.url);
 
   console.log("current Image", currentImage);
 
+  // const nonExistingImages = existImage?.filter(
+  //   (url) => !currentImage.includes(url)
+  // );
+
+  // console.log(nonExistingImages);
+
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     try {
       const urlImage = fileStates.map((file) => file.url);
       const isFileToUpdload = fileStates.map((file) => file.file);
       const existImage = productById?.images;
-
       const currentImage = fileStates
         .filter((file) => file.url !== undefined)
         .map((link) => link.url);
+
+      const nonExistingImages = existImage?.filter(
+        (url) => !currentImage.includes(url)
+      );
 
       const isEqual =
         urlImage?.length === existImage?.length &&
@@ -135,7 +148,9 @@ export default function ModalEditProducts() {
                     ? existImage[index]
                     : undefined;
               } else {
-                targetUrltoReplace = undefined;
+                targetUrltoReplace = nonExistingImages
+                  ? nonExistingImages[index]
+                  : undefined;
               }
 
               try {
