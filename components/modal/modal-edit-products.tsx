@@ -32,7 +32,11 @@ import {
   type FileState,
 } from "@/components/multi-file-image-dropzone";
 import { FormProductsValidation } from "@/lib/validations/types";
-import { addProduct, editProduct } from "@/lib/actions/products.action";
+import {
+  addProduct,
+  deleteProduct,
+  editProduct,
+} from "@/lib/actions/products.actions";
 import { useEditProducts } from "@/hooks/use-edit-products";
 
 type ProductValidation = z.infer<typeof FormProductsValidation>;
@@ -91,27 +95,21 @@ export default function ModalEditProducts() {
     onClose();
   };
 
-  // const existImage = productById?.images;
-
-  // console.log(existImage);
-
+  const existImage = productById?.images;
   const currentImage = fileStates
     .filter((file) => file.url !== undefined)
     .map((link) => link.url);
+  const nonExistingImages = existImage?.filter(
+    (url) => !currentImage.includes(url)
+  );
 
-  console.log("current Image", currentImage);
-
-  // const nonExistingImages = existImage?.filter(
-  //   (url) => !currentImage.includes(url)
-  // );
-
-  // console.log(nonExistingImages);
+  console.log(nonExistingImages);
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     try {
       const urlImage = fileStates.map((file) => file.url);
-      const isFileToUpdload = fileStates.map((file) => file.file);
       const existImage = productById?.images;
+      const isFileToUpdload = fileStates.map((file) => file.file);
       const currentImage = fileStates
         .filter((file) => file.url !== undefined)
         .map((link) => link.url);
@@ -180,13 +178,9 @@ export default function ModalEditProducts() {
             })
         );
 
-        const addExistingImagetoDB = fileStates.filter(
-          (file) => file.url !== undefined
-        );
-
         let payload;
 
-        if (addExistingImagetoDB.length >= 1 && !!isFileToUpdload) {
+        if (currentImage.length >= 1 && !!isFileToUpdload) {
           payload = {
             ...data,
             images: [...currentImage, ...editedImage],
@@ -197,8 +191,6 @@ export default function ModalEditProducts() {
             images: editedImage,
           };
         }
-
-        console.log(payload);
 
         const parsedPayload = FormProductsValidation.safeParse(payload);
 
@@ -218,8 +210,6 @@ export default function ModalEditProducts() {
       handleOnClose();
     }
   };
-
-  console.log(fileStates);
 
   return (
     <div>

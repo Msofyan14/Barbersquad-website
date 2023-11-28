@@ -1,4 +1,5 @@
 import {
+  initialGallery,
   initialTeams,
   initialUsers,
   intialProducts,
@@ -6,6 +7,7 @@ import {
 import Users from "./lib/model/users.model";
 import Teams from "./lib/model/teams.model";
 import Products from "./lib/model/products.model";
+import Gallery from "./lib/model/gallery.model";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
@@ -26,6 +28,7 @@ const importData = async () => {
     await Users.deleteMany();
     await Teams.deleteMany();
     await Products.deleteMany();
+    await Gallery.deleteMany();
 
     for (const userData of initialUsers) {
       const hashedPassword = await bcrypt.hash(userData.password, 8);
@@ -35,6 +38,7 @@ const importData = async () => {
     await Users.insertMany(initialUsers);
     await Teams.insertMany(initialTeams);
     await Products.insertMany(intialProducts);
+    await Gallery.insertMany(initialGallery);
 
     console.log("Data imported");
 
@@ -51,6 +55,7 @@ const destroyData = async () => {
     await Users.deleteMany();
     await Teams.deleteMany();
     await Products.deleteMany();
+    await Gallery.deleteMany();
 
     console.log("Data destroyed");
     process.exit();

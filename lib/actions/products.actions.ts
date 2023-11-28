@@ -115,19 +115,19 @@ export async function editProduct({ id, data, pathname }: TEditProduct) {
     const editProduct = await Products.findByIdAndUpdate({ _id: id }, data);
 
     if (!editProduct) {
-      throw new Error("Failed edit team");
+      throw new Error("Failed edit product");
     }
 
     await editProduct.save();
 
     revalidatePath(pathname);
   } catch (error: any) {
-    const errorMessage = error.message || "Failed  edit team ";
+    const errorMessage = error.message || "Failed  edit product ";
     throw new Error(errorMessage);
   }
 }
 
-export async function deleteProduct(id: string, pathname: string) {
+export async function deleteProduct(id: string | undefined, pathname: string) {
   try {
     connectToDB();
 
