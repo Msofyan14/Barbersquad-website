@@ -12,8 +12,13 @@ import { EffectCoverflow, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import { ITeams } from "@/types";
 
-export function OurTeams() {
+interface IOurTeams {
+  data: ITeams[];
+}
+
+export function OurTeams({ data }: IOurTeams) {
   return (
     <section id="our-teams" className="section-wrapper">
       <HeadingSection title="OUR TEAMS" />
@@ -53,7 +58,7 @@ export function OurTeams() {
           modules={[EffectCoverflow, Pagination]}
           className="swiper-wrapper"
         >
-          {ourTeams.map((team, index) => (
+          {data.map((team, index) => (
             <SwiperSlide key={index}>
               <div className="flex flex-col items-center gap-y-3">
                 <div

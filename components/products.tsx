@@ -5,15 +5,20 @@ import { products } from "@/constants";
 import { Button } from "./ui/button";
 import { Eye } from "lucide-react";
 import { alice } from "./ui/fonts";
+import { IProducts } from "@/types";
 
-export function Products() {
+interface IGalleryProps {
+  data: IProducts[];
+}
+
+export function Products({ data }: IGalleryProps) {
   return (
     <section id="products" className="section-wrapper">
       <HeadingSection title="PRODUCTS" />
 
       <div className="flex flex-col gap-y-[40px] items-center">
         <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-          {products.map((img, index) => (
+          {data.map((product, index) => (
             <div key={index} className="border rounded-lg p-3">
               <div
                 className={`
@@ -25,7 +30,7 @@ export function Products() {
                 >
                   <Image
                     className="object-cover   transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125 overflow-hidden"
-                    src={img.image}
+                    src={product.images[0]}
                     fill
                     alt="gallery"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -44,8 +49,8 @@ export function Products() {
                 className={`mt-3 ${alice.className} text-center bg-[#D9D9D9] 
                   rounded-b-lg py-1 `}
               >
-                <h1 className=" text-sm md:text-xl">Pomade Oil Based </h1>
-                <h1 className=" text-sm md:text-xl">Rp. 120.000</h1>
+                <h1 className=" text-sm md:text-xl">{product.name}</h1>
+                <h1 className=" text-sm md:text-xl">Rp. {product.price}</h1>
               </div>
             </div>
           ))}
