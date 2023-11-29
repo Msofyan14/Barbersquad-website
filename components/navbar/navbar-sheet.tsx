@@ -33,7 +33,7 @@ export function NavbarSheet() {
         <SheetTrigger className="md:hidden">
           <Menu className="text-white w-8 h-8" />
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="bg-neutral-950 border-none">
           <SheetHeader>
             <div className="mt-5">
               <Link href="https://wa.me/+6285691534089" target="_blank">

@@ -48,11 +48,11 @@ export async function getProducts({
       _id: team._id.toString(),
     }));
 
-    const totalTeamCount = await Products.countDocuments(query);
+    const totalProductCount = await Products.countDocuments(query);
 
-    const pageCount = Math.ceil(totalTeamCount / pageSize);
+    const pageCount = Math.ceil(totalProductCount / pageSize);
 
-    return { data, pageCount };
+    return { data, pageCount, totalProductCount };
   } catch (error: any) {
     const errorMessage = error.message || "Failed to get teams ";
     throw new Error(errorMessage);
