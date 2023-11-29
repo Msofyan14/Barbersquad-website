@@ -2,10 +2,14 @@ import mongoose from "mongoose";
 
 const gallerySchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     images: [
       {
         type: String,
-        requred: true,
+        required: true,
       },
     ],
   },

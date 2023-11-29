@@ -27,9 +27,10 @@ export const FormProductsValidation = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   price: z.coerce.number().min(1, { message: "Price is required" }),
   description: z.string().min(1, { message: "Description is required" }),
-  images: z.array(z.string()),
+  images: z.array(z.string()).min(1, { message: "Images is required" }),
 });
 
 export const FormGalleryValidation = z.object({
-  images: z.array(z.string()),
+  name: z.string().min(1, { message: "Name is required" }),
+  images: z.array(z.string()).min(1, { message: "Images is required" }),
 });

@@ -1,4 +1,4 @@
-import { getGallery } from "@/lib/actions/gallery,actions";
+import { getGallery } from "@/lib/actions/gallery.actions";
 import { ColumnGalery } from "./_components/column-gallery";
 
 export default async function Gallery({

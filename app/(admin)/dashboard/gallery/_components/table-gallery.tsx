@@ -35,7 +35,7 @@ import { DataTablePagination } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchBar } from "@/components/ui/search-bar";
 import { IProducts } from "@/types";
-import { useAddProducts } from "@/hooks/use-add-products";
+import { useAddGallery } from "@/hooks/use-add-gallery";
 
 interface TableUsersProps {
   data: IProducts[];
@@ -50,7 +50,7 @@ export function TableGallery({ data, columns, pageCount }: TableUsersProps) {
   const page = searchParams?.get("page") ?? "1";
   const per_page = searchParams?.get("per_page") ?? "10";
 
-  const modal = useAddProducts();
+  const modal = useAddGallery();
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -143,7 +143,7 @@ export function TableGallery({ data, columns, pageCount }: TableUsersProps) {
           className="mr-2 whitespace-nowrap"
         >
           <PlusIcon className="hidden md:block w-5 h-5 mr-1" />
-          Add Product
+          Add Gallery
         </Button>
         <SearchBar />
         <DropdownMenu>

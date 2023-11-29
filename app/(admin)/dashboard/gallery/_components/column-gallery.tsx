@@ -1,16 +1,16 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import React, { useEffect } from "react";
+import React from "react";
 import { ConfirmDialog } from "@/components/modal/confirm-modal";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { useEdgeStore } from "@/lib/edgestore";
 import { IProducts } from "@/types";
-import { useEditProducts } from "@/hooks/use-edit-products";
-import { deleteProduct, getProductByid } from "@/lib/actions/products.actions";
 import { TableGallery } from "./table-gallery";
+import { deleteGallery, getGalleryByid } from "@/lib/actions/gallery.actions";
+import { useEditGallery } from "@/hooks/use-edit-gallery";
 
 interface IColumns {
   page: number;
@@ -21,15 +21,16 @@ interface IColumns {
 
 export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
-  const { setProducts, onOpen } = useEditProducts();
+
+  const { setGallery, onOpen } = useEditGallery();
 
   const { edgestore } = useEdgeStore();
 
-  const handleGetProductById = async (id: string) => {
+  const handleGetGalleryById = async (id: string) => {
     try {
       onOpen();
-      const res = await getProductByid(id);
-      setProducts(res);
+      const res = await getGalleryByid(id);
+      setGallery(res);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -49,8 +50,8 @@ export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
         })
       );
 
-      await deleteProduct(id, pathname).then(() => {
-        toast.success("Succes delete product");
+      await deleteGallery(id, pathname).then(() => {
+        toast.success("Succes delete gallery");
       });
     } catch (error: any) {
       toast.error(error.message);
@@ -69,6 +70,15 @@ export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
         ),
       },
       {
+        accessorKey: "name",
+        header: "Name",
+        cell: ({ row }) => (
+          <div className="capitalize max-md:text-xs">
+            {row.getValue("name")}
+          </div>
+        ),
+      },
+      {
         accessorKey: "images",
         header: "Images",
         cell: ({ row }) => (
@@ -78,9 +88,9 @@ export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
                 <Image
                   key={index}
                   src={image}
-                  height={80}
-                  width={80}
-                  className="object-cover w-full"
+                  height={120}
+                  width={120}
+                  className="object-cover "
                   alt="profile"
                 />
               ))}
@@ -96,7 +106,7 @@ export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
           <div className="capitalize flex gap-x-2 justify-center">
             <Button
               onClick={() => {
-                handleGetProductById(row.getValue("_id"));
+                handleGetGalleryById(row.getValue("_id"));
               }}
               size="sm"
             >
