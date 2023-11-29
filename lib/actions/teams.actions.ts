@@ -54,7 +54,7 @@ export async function getTeams({
 
     const pageCount = Math.ceil(totalTeamCount / pageSize);
 
-    return { data, pageCount };
+    return { data, pageCount, totalTeamCount };
   } catch (error: any) {
     const errorMessage = error.message || "Failed to get teams ";
     throw new Error(errorMessage);

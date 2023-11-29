@@ -3,7 +3,7 @@ import { connectToDB } from "../mongoose";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 import Products from "../model/products.model";
-import { IGallery, IProducts } from "@/types";
+import { IGallery } from "@/types";
 import Gallery from "../model/gallery.model";
 
 type TGetGallery = {
@@ -49,11 +49,11 @@ export async function getGallery({
       _id: team._id.toString(),
     }));
 
-    const totalTeamCount = await Gallery.countDocuments(query);
+    const totalGalleryCount = await Gallery.countDocuments(query);
 
-    const pageCount = Math.ceil(totalTeamCount / pageSize);
+    const pageCount = Math.ceil(totalGalleryCount / pageSize);
 
-    return { data, pageCount };
+    return { data, pageCount, totalGalleryCount };
   } catch (error: any) {
     const errorMessage = error.message || "Failed to get teams ";
     throw new Error(errorMessage);
