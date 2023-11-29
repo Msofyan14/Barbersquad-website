@@ -1,3 +1,9 @@
+export interface ModalStore {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
 export interface IUsers {
   email: string;
   name: string;
@@ -22,5 +28,6 @@ export interface IProducts {
 
 export interface IGallery {
   _id?: string | undefined;
+  name: string;
   images: string[];
 }

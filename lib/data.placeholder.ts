@@ -66,15 +66,23 @@ export const intialProducts: IProducts[] = [
 
 export const initialGallery: IGallery[] = [
   {
+    name: "Temple Taper",
     images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
   },
   {
+    name: "Temple Taper",
     images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
   },
   {
+    name: "Temple Taper",
     images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
   },
   {
+    name: "Temple Taper",
+    images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
+  },
+  {
+    name: "Temple Taper",
     images: ["/gallery.png", "/gallery.png", "/gallery.png", "/gallery.png"],
   },
 ];

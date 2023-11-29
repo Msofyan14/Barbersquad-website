@@ -1,10 +1,5 @@
+import { ModalStore } from "@/types";
 import { create } from "zustand";
-
-interface ModalStore {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-}
 
 export const useAddTeams = create<ModalStore>((set) => ({
   isOpen: false,
