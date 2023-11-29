@@ -11,25 +11,28 @@ async function Dashboard() {
 
   return (
     <div className="p-5">
-      <div className="flex items-center flex-wrap gap-5 mt-16 max-sm:justify-center md:mt-20 max-md:pb-20">
-        <DashboardCardOverview
-          link="/dashboard/teams"
-          icon="/users-2.svg"
-          title="Teams"
-          totalItem={totalTeamCount}
-        />
-        <DashboardCardOverview
-          link="/dashboard/gallery"
-          icon="/image.svg"
-          title="Gallery"
-          totalItem={totalGalleryCount}
-        />
-        <DashboardCardOverview
-          link="/dashboard/products"
-          icon="/layout-list.svg"
-          title="Products"
-          totalItem={totalProductCount}
-        />
+      <div className="mt-16  md:mt-20 max-md:pb-20">
+        <h1 className="my-3 max-sm:text-center text-xl">Dashboard Overview</h1>
+        <div className="flex items-center flex-wrap max-sm:justify-center gap-5 ">
+          <DashboardCardOverview
+            link="/dashboard/teams"
+            icon="/users-2.svg"
+            title="Teams"
+            totalItem={totalTeamCount}
+          />
+          <DashboardCardOverview
+            link="/dashboard/gallery"
+            icon="/image.svg"
+            title="Gallery"
+            totalItem={totalGalleryCount}
+          />
+          <DashboardCardOverview
+            link="/dashboard/products"
+            icon="/layout-list.svg"
+            title="Products"
+            totalItem={totalProductCount}
+          />
+        </div>
       </div>
     </div>
   );
