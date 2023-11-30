@@ -1,4 +1,4 @@
-import { alice, allison } from "./ui/fonts";
+import { alice, allison } from "../ui/fonts";
 
 export function HeadingSection({
   title,

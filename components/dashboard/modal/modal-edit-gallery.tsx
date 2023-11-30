@@ -19,7 +19,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { useEdgeStore } from "@/lib/edgestore";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -86,16 +86,6 @@ export default function ModalEditGallery() {
     form.reset();
     onClose();
   };
-
-  //   const existImage = galleryById?.images;
-  //   const currentImage = fileStates
-  //     .filter((file) => file.url !== undefined)
-  //     .map((link) => link.url);
-  //   const nonExistingImages = existImage?.filter(
-  //     (url) => !currentImage.includes(url)
-  //   );
-
-  //   console.log(nonExistingImages);
 
   const onSubmit: SubmitHandler<GalleryValidation> = async (data) => {
     try {
@@ -210,7 +200,7 @@ export default function ModalEditGallery() {
       <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Add Your Teams</SheetTitle>
+            <SheetTitle>Edit Your Gallery</SheetTitle>
           </SheetHeader>
           <Form {...form}>
             <form

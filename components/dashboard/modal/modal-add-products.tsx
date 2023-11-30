@@ -21,61 +21,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { useEdgeStore } from "@/lib/edgestore";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import {
   MultiFileDropzone,
   type FileState,
 } from "@/components/multi-file-image-dropzone";
 import { FormProductsValidation } from "@/lib/validations/types";
-import {
-  addProduct,
-  deleteProduct,
-  editProduct,
-} from "@/lib/actions/products.actions";
-import { useEditProducts } from "@/hooks/use-edit-products";
+import { useAddProducts } from "@/hooks/use-add-products";
+import { addProduct } from "@/lib/actions/products.actions";
 
 type ProductValidation = z.infer<typeof FormProductsValidation>;
 
-export default function ModalEditProducts() {
-  const { productById, isOpen, onClose } = useEditProducts();
-
+export default function ModalAddProducts() {
   const form = useForm<ProductValidation>({
     resolver: zodResolver(FormProductsValidation),
     defaultValues: {
-      name: productById?.name || "",
-      price: productById?.price || 0,
-      description: productById?.description || "",
-      images: productById?.images || [""],
+      name: "",
+      price: 0,
+      description: "",
+      images: [],
     },
   });
-
   const [fileStates, setFileStates] = useState<FileState[]>([]);
 
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
-
-  useEffect(() => {
-    form.reset(productById);
-    // @ts-ignore
-
-    const productImages = productById?.images || [];
-
-    const fileStatesFromImages = productImages.map((imageUrl) => ({
-      file: null,
-      url: imageUrl,
-      key: Math.random().toString(36).slice(2),
-      progress: "PENDING",
-    }));
-
-    // @ts-ignore
-    setFileStates(fileStatesFromImages);
-  }, [productById]);
 
   function updateFileProgress(key: string, progress: FileState["progress"]) {
     setFileStates((fileStates) => {
@@ -89,134 +65,65 @@ export default function ModalEditProducts() {
       return newFileStates;
     });
   }
+  const modal = useAddProducts();
 
-  const handleOnClose = () => {
+  const onClose = () => {
     form.reset();
-    onClose();
+    setFileStates([]);
+    modal.onClose();
   };
-
-  const existImage = productById?.images;
-  const currentImage = fileStates
-    .filter((file) => file.url !== undefined)
-    .map((link) => link.url);
-  const nonExistingImages = existImage?.filter(
-    (url) => !currentImage.includes(url)
-  );
-
-  console.log(nonExistingImages);
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     try {
-      const urlImage = fileStates.map((file) => file.url);
-      const existImage = productById?.images;
-      const isFileToUpdload = fileStates.map((file) => file.file);
-      const currentImage = fileStates
-        .filter((file) => file.url !== undefined)
-        .map((link) => link.url);
+      const uploadedImage = await Promise.all(
+        fileStates.map(async (fileState) => {
+          try {
+            if (fileState.progress !== "PENDING") return;
+            const res = await edgestore.publicFiles.upload({
+              file: fileState.file,
+              onProgressChange: async (progress: any) => {
+                updateFileProgress(fileState.key, progress);
+                if (progress === 100) {
+                  // wait 1 second to set it to complete
+                  // so that the user can see the progress bar
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                  updateFileProgress(fileState.key, "COMPLETE");
+                }
+              },
+            });
 
-      const nonExistingImages = existImage?.filter(
-        (url) => !currentImage.includes(url)
+            return res.url;
+          } catch (err) {
+            updateFileProgress(fileState.key, "ERROR");
+          }
+        })
       );
 
-      const isEqual =
-        urlImage?.length === existImage?.length &&
-        urlImage.every((value, index) => value === existImage[index]);
+      const payload = {
+        ...data,
+        images: uploadedImage,
+      };
 
-      if (isEqual) {
-        const parsedPayload = FormProductsValidation.safeParse(data);
-        if (parsedPayload.success) {
-          await editProduct({
-            id: productById?._id,
-            data: parsedPayload.data,
-            pathname: pathname,
-          }).then(() => {
-            toast.success("Success Edit product");
-          });
-        }
-      } else {
-        const editedImage = await Promise.all(
-          fileStates
-            .filter((fileState) => fileState.file !== null) // Filter out entries with null files
-            .map(async (fileState, index) => {
-              let targetUrltoReplace;
+      const parsedPayload = FormProductsValidation.safeParse(payload);
 
-              if (currentImage.length === 0 && isFileToUpdload) {
-                targetUrltoReplace =
-                  existImage && existImage.length > index
-                    ? existImage[index]
-                    : undefined;
-              } else {
-                targetUrltoReplace = nonExistingImages
-                  ? nonExistingImages[index]
-                  : undefined;
-              }
-
-              try {
-                if (fileState.progress !== "PENDING") return;
-
-                const res = await edgestore.publicFiles.upload({
-                  file: fileState.file,
-                  options: {
-                    replaceTargetUrl: targetUrltoReplace,
-                  },
-
-                  onProgressChange: async (progress: any) => {
-                    updateFileProgress(fileState.key, progress);
-                    if (progress === 100) {
-                      // wait 1 second to set it to complete
-                      // so that the user can see the progress bar
-                      await new Promise((resolve) => setTimeout(resolve, 1000));
-                      updateFileProgress(fileState.key, "COMPLETE");
-                    }
-                  },
-                });
-
-                return res.url;
-              } catch (err) {
-                updateFileProgress(fileState.key, "ERROR");
-              }
-            })
-        );
-
-        let payload;
-
-        if (currentImage.length >= 1 && !!isFileToUpdload) {
-          payload = {
-            ...data,
-            images: [...currentImage, ...editedImage],
-          };
-        } else {
-          payload = {
-            ...data,
-            images: editedImage,
-          };
-        }
-
-        const parsedPayload = FormProductsValidation.safeParse(payload);
-
-        if (parsedPayload.success) {
-          await editProduct({
-            id: productById?._id,
-            data: parsedPayload.data,
-            pathname: pathname,
-          }).then(() => {
-            toast.success("Success Edit products");
-          });
-        }
+      if (parsedPayload.success) {
+        await addProduct(parsedPayload.data, pathname).then(() => {
+          toast.success("Success add products");
+        });
       }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
-      handleOnClose();
+      onClose();
     }
   };
 
   return (
     <div>
-      <Sheet open={isOpen} onOpenChange={onClose}>
+      <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
         <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Add Your Teams</SheetTitle>
+            <SheetTitle>Add Your Product</SheetTitle>
           </SheetHeader>
           <Form {...form}>
             <form
@@ -284,7 +191,6 @@ export default function ModalEditProducts() {
               />
 
               <FormField
-                control={form.control}
                 name="images"
                 render={({ field }) => (
                   <FormItem>
@@ -293,7 +199,6 @@ export default function ModalEditProducts() {
                       <>
                         <div className="">
                           <MultiFileDropzone
-                            {...field}
                             className="w-full"
                             value={fileStates}
                             dropzoneOptions={{
@@ -302,6 +207,13 @@ export default function ModalEditProducts() {
                             }}
                             onChange={setFileStates}
                             onFilesAdded={async (addedFiles) => {
+                              addedFiles.forEach((file) => {
+                                form.setValue("images", [
+                                  ...form.getValues().images,
+                                  file?.file.name,
+                                ]);
+                              });
+
                               setFileStates([...fileStates, ...addedFiles]);
                             }}
                           />

@@ -3,6 +3,7 @@
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -16,45 +17,39 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 
+import { useAddTeams } from "@/hooks/use-add-teams";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { z } from "zod";
 import { FormTeamsValidation } from "@/lib/validations/types";
-import { SingleImageDropzone } from "../single-image-dropzone";
-import { useEffect, useState } from "react";
+import { SingleImageDropzone } from "../../single-image-dropzone";
+import { useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { toast } from "sonner";
-import { editTeam } from "@/lib/actions/teams.actions";
+import { addTeams } from "@/lib/actions/teams.actions";
 import { usePathname } from "next/navigation";
-import { useEditTeams } from "@/hooks/use-edit-team";
 import { Loader2 } from "lucide-react";
 
 type TeamsValidation = z.infer<typeof FormTeamsValidation>;
 
-export default function ModalEditTeams() {
-  const [file, setFile] = useState<File | undefined>();
+export default function ModalAddTeams() {
+  const [file, setFile] = useState<File>();
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
-  const modal = useEditTeams();
-  const { teamByid } = useEditTeams();
 
   const form = useForm<TeamsValidation>({
     resolver: zodResolver(FormTeamsValidation),
     defaultValues: {
-      name: teamByid?.name || "",
-      email: teamByid?.email || "",
-      whatsapp: teamByid?.whatsapp || 62,
-      image: teamByid?.image || "",
+      name: "",
+      email: "",
+      whatsapp: 62,
+      image: "",
     },
   });
 
-  useEffect(() => {
-    form.reset(teamByid);
-    // @ts-ignore
-    setFile(teamByid?.image);
-  }, [teamByid]);
+  const modal = useAddTeams();
 
   const onClose = () => {
     setFile(undefined);
@@ -64,48 +59,22 @@ export default function ModalEditTeams() {
 
   const onSubmit: SubmitHandler<TeamsValidation> = async (data) => {
     try {
-      if (file === teamByid?.image) {
-        const parsedPayload = FormTeamsValidation.safeParse(data);
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+        });
+
+        const payload = {
+          ...data,
+          image: res.url,
+        };
+
+        const parsedPayload = FormTeamsValidation.safeParse(payload);
 
         if (parsedPayload.success) {
-          await editTeam({
-            id: teamByid?._id,
-            data: parsedPayload.data,
-            pathname: pathname,
-          }).then(() => {
-            toast.success("Success edit team");
+          await addTeams(parsedPayload.data, pathname).then(() => {
+            toast.success("Success add team");
           });
-        }
-      } else {
-        if (file) {
-          const res = await edgestore.publicFiles.upload({
-            file,
-            options: {
-              replaceTargetUrl: teamByid?.image,
-            },
-          });
-
-          if (!res) {
-            toast.error("Failed to upload image");
-            return;
-          }
-
-          const payload = {
-            ...data,
-            image: res.url,
-          };
-
-          const parsedPayload = FormTeamsValidation.safeParse(payload);
-
-          if (parsedPayload.success) {
-            await editTeam({
-              id: teamByid?._id,
-              data: parsedPayload.data,
-              pathname: pathname,
-            }).then(() => {
-              toast.success("Success edit team");
-            });
-          }
         }
       }
     } catch (error: any) {
@@ -118,12 +87,9 @@ export default function ModalEditTeams() {
   return (
     <div>
       <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
-        <SheetContent
-          side={"bottom"}
-          className="h-[80%] overflow-y-auto transition duration-300"
-        >
+        <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Edit Your Teams</SheetTitle>
+            <SheetTitle>Add Your Teams</SheetTitle>
           </SheetHeader>
           <Form {...form}>
             <form
@@ -230,10 +196,10 @@ export default function ModalEditTeams() {
                 {form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                    Editing
+                    Submitting
                   </>
                 ) : (
-                  "Edit"
+                  "Submit"
                 )}
               </Button>
             </form>
