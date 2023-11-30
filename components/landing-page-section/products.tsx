@@ -8,13 +8,18 @@ import { ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { alice } from "../ui/fonts";
 import { IProducts } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDetailProducts } from "@/hooks/use-detail-products";
+import { getProductByid } from "@/lib/actions/products.actions";
+import { toast } from "sonner";
 
-interface IGalleryProps {
+interface IProductsProps {
   data: IProducts[];
   totalProducts: number;
 }
 
-export function Products({ data, totalProducts }: IGalleryProps) {
+export function Products({ data, totalProducts }: IProductsProps) {
+  const { onOpen, setDetailProduct } = useDetailProducts();
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,6 +42,21 @@ export function Products({ data, totalProducts }: IGalleryProps) {
     }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleOpenDetailProducts = async (id: string | undefined) => {
+    onOpen();
+    try {
+      const detailGallery = await getProductByid(id);
+
+      if (!detailGallery) {
+        toast.error("failed retrieve details gallery");
+      }
+
+      setDetailProduct(detailGallery);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -66,7 +86,10 @@ export function Products({ data, totalProducts }: IGalleryProps) {
 
                 <div className="absolute inset-0 transition-all duration-500 group-hover:bg-neutral-950/30"></div>
                 <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 ">
-                  <Button className="text-white rounded-full ">
+                  <Button
+                    onClick={() => handleOpenDetailProducts(product._id)}
+                    className="text-white rounded-full "
+                  >
                     <Eye className="mr-1" />
                     Details
                   </Button>

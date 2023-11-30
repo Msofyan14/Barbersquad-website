@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ModalDetailGallery } from "./modal-detail-gallery";
+import { ModalDetailProducts } from "./modal-detail-products";
 
 export const ModalLandingPageProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -17,6 +18,7 @@ export const ModalLandingPageProvider = () => {
   return (
     <>
       <ModalDetailGallery />
+      <ModalDetailProducts />
     </>
   );
 };

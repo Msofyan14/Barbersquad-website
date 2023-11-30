@@ -59,7 +59,7 @@ export async function getProducts({
   }
 }
 
-export async function getProductByid(id: string) {
+export async function getProductByid(id: string | undefined) {
   try {
     connectToDB();
 

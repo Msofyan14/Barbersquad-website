@@ -36,7 +36,7 @@ export function ModalDetailGallery() {
                 src={
                   galleryById?.images[firstImage] || "/image-placeholder.png"
                 }
-                className="object-cover "
+                className="object-cover"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="gallery"
