@@ -16,13 +16,16 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const limit = searchParams?.gallery ? +searchParams.gallery : 6;
+  const limitGallery = searchParams?.gallery ? +searchParams.gallery : 6;
+  const limitProducts = searchParams?.products ? +searchParams.products : 4;
 
   const { data: teams } = await getTeams({});
   const { data: gallery, totalGalleryCount } = await getGallery({
-    pageSize: limit,
+    pageSize: limitGallery,
   });
-  const { data: products } = await getProducts({});
+  const { data: products, totalProductCount } = await getProducts({
+    pageSize: limitProducts,
+  });
 
   return (
     <main id="home" className="relative">
@@ -31,7 +34,7 @@ export default async function Home({
       <Services />
       <OurTeams data={teams} />
       <Gallery data={gallery} totalImages={totalGalleryCount} />
-      <Products data={products} />
+      <Products data={products} totalProducts={totalProductCount} />
       <AboutUs />
       <div className="bg-neutral-950">
         <Address />

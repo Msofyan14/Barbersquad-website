@@ -3,10 +3,9 @@
 import { HeadingSection } from "./heading-section";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Eye } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { IGallery } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface IGalleryProps {
   data: IGallery[];
@@ -19,14 +18,20 @@ export function Gallery({ data, totalImages }: IGalleryProps) {
   const searchParams = useSearchParams();
   const valueGallery = data.length;
 
-  const handleShowMore = async () => {
-    const params = new URLSearchParams(searchParams);
-    const gallery = params.get("gallery");
+  const params = new URLSearchParams(searchParams);
+  const galleryParams = params.get("gallery");
 
-    if (!gallery) {
-      params.set("gallery", (valueGallery + 6).toString());
+  const handleShowMore = async () => {
+    if (!galleryParams || +galleryParams < totalImages) {
+      params.set("gallery", (valueGallery + 2).toString());
     } else {
       params.delete("gallery");
+
+      const nextSection = document.getElementById("gallery");
+      if (nextSection) {
+        nextSection?.classList.add("scroll-mt-[120px]");
+        nextSection?.scrollIntoView({ behavior: "smooth" });
+      }
     }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -76,24 +81,22 @@ export function Gallery({ data, totalImages }: IGalleryProps) {
             );
           })}
         </div>
-        <div
-          className={`
-        
-        ${totalImages === data.length && "hidden"}
-        
-        `}
-        >
-          <Button onClick={handleShowMore}>
-            {totalImages > data.length ? "Show More" : "Show Less"}
-          </Button>
-        </div>
 
-        <Button
-          className={`hidden ${totalImages === data.length && "block"}`}
-          onClick={handleShowMore}
-        >
-          Show Less
-        </Button>
+        <div className="flex flex-col items-center justify-center gap-y-2">
+          {totalImages > data.length && (
+            <>
+              <Button onClick={handleShowMore}>Show More</Button>
+              <ChevronDown />
+            </>
+          )}
+          {totalImages === data.length && galleryParams && (
+            <>
+              <ChevronUp />
+              <p className="text-slate-500"> All images already shown</p>
+              <Button onClick={handleShowMore}>Show Less</Button>
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -1,17 +1,44 @@
+"use client";
+
 import React from "react";
 import { HeadingSection } from "./heading-section";
 import Image from "next/image";
-import { products } from "@/constants";
 import { Button } from "./ui/button";
-import { Eye } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { alice } from "./ui/fonts";
 import { IProducts } from "@/types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface IGalleryProps {
   data: IProducts[];
+  totalProducts: number;
 }
 
-export function Products({ data }: IGalleryProps) {
+export function Products({ data, totalProducts }: IGalleryProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const valueProducts = data.length;
+
+  const params = new URLSearchParams(searchParams);
+  const productsParams = params.get("products");
+
+  const handleShowMore = async () => {
+    if (!productsParams || +productsParams < totalProducts) {
+      params.set("products", (valueProducts + 4).toString());
+    } else {
+      params.delete("products");
+
+      const nextSection = document.getElementById("products");
+      if (nextSection) {
+        nextSection?.classList.add("scroll-mt-[120px]");
+        nextSection?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <section id="products" className="section-wrapper">
       <HeadingSection title="PRODUCTS" />
@@ -55,8 +82,20 @@ export function Products({ data }: IGalleryProps) {
             </div>
           ))}
         </div>
-        <div className="">
-          <Button>Show More</Button>
+        <div className="flex flex-col items-center justify-center gap-y-2">
+          {totalProducts > data.length && (
+            <>
+              <Button onClick={handleShowMore}>Show More</Button>
+              <ChevronDown />
+            </>
+          )}
+          {totalProducts === data.length && productsParams && (
+            <>
+              <ChevronUp />
+              <p className="text-slate-500"> All products already shown</p>
+              <Button onClick={handleShowMore}>Show Less</Button>
+            </>
+          )}
         </div>
       </div>
     </section>
