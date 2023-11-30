@@ -60,7 +60,7 @@ export async function getGallery({
   }
 }
 
-export async function getGalleryByid(id: string) {
+export async function getGalleryByid(id: string | undefined) {
   try {
     connectToDB();
 

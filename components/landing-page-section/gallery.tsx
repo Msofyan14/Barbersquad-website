@@ -2,10 +2,13 @@
 
 import { HeadingSection } from "./heading-section";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { IGallery } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDetailGallery } from "@/hooks/use-detail-gallery";
+import { getGalleryByid } from "@/lib/actions/gallery.actions";
+import { toast } from "sonner";
 
 interface IGalleryProps {
   data: IGallery[];
@@ -13,6 +16,8 @@ interface IGalleryProps {
 }
 
 export function Gallery({ data, totalImages }: IGalleryProps) {
+  const { onOpen, setDetailGallery } = useDetailGallery();
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,6 +40,21 @@ export function Gallery({ data, totalImages }: IGalleryProps) {
     }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleOpenDetailGallery = async (id: string | undefined) => {
+    onOpen();
+    try {
+      const detailGallery = await getGalleryByid(id);
+
+      if (!detailGallery) {
+        toast.error("failed retrieve details gallery");
+      }
+
+      setDetailGallery(detailGallery);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -72,7 +92,10 @@ export function Gallery({ data, totalImages }: IGalleryProps) {
 
                 <div className="absolute inset-0 transition-all duration-500 group-hover:bg-neutral-950/30"></div>
                 <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 ">
-                  <Button className={`text-white rounded-full `}>
+                  <Button
+                    onClick={() => handleOpenDetailGallery(img._id)}
+                    className={`text-white rounded-full `}
+                  >
                     <Eye className="mr-1" />
                     Details
                   </Button>

@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
-import { ConfirmDialog } from "@/components/modal/confirm-modal";
+import { ConfirmDialog } from "@/components/dashboard/modal/confirm-modal";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";

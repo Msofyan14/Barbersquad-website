@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { HeadingSection } from "./heading-section";
-import { alice } from "./ui/fonts";
+import { alice } from "../ui/fonts";
 import { openingHours } from "@/constants";
 
 export function Address() {

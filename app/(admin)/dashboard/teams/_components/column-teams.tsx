@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { ConfirmDialog } from "@/components/modal/confirm-modal";
+import { ConfirmDialog } from "@/components/dashboard/modal/confirm-modal";
 import { TableTeams } from "./table-teams";
 import Image from "next/image";
 import { usePathname } from "next/navigation";

@@ -16,12 +16,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 
-import { Textarea } from "@/components/ui/textarea";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { useEdgeStore } from "@/lib/edgestore";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -31,19 +29,17 @@ import {
   MultiFileDropzone,
   type FileState,
 } from "@/components/multi-file-image-dropzone";
-import { FormProductsValidation } from "@/lib/validations/types";
-import { useAddProducts } from "@/hooks/use-add-products";
-import { addProduct } from "@/lib/actions/products.actions";
+import { FormGalleryValidation } from "@/lib/validations/types";
+import { useAddGallery } from "@/hooks/use-add-gallery";
+import { addGallery } from "@/lib/actions/gallery.actions";
 
-type ProductValidation = z.infer<typeof FormProductsValidation>;
+type GalleryValidation = z.infer<typeof FormGalleryValidation>;
 
-export default function ModalAddProducts() {
-  const form = useForm<ProductValidation>({
-    resolver: zodResolver(FormProductsValidation),
+export default function ModalAddGallery() {
+  const form = useForm<GalleryValidation>({
+    resolver: zodResolver(FormGalleryValidation),
     defaultValues: {
       name: "",
-      price: 0,
-      description: "",
       images: [],
     },
   });
@@ -65,7 +61,7 @@ export default function ModalAddProducts() {
       return newFileStates;
     });
   }
-  const modal = useAddProducts();
+  const modal = useAddGallery();
 
   const onClose = () => {
     form.reset();
@@ -73,7 +69,7 @@ export default function ModalAddProducts() {
     modal.onClose();
   };
 
-  const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
+  const onSubmit: SubmitHandler<GalleryValidation> = async (data) => {
     try {
       const uploadedImage = await Promise.all(
         fileStates.map(async (fileState) => {
@@ -104,11 +100,11 @@ export default function ModalAddProducts() {
         images: uploadedImage,
       };
 
-      const parsedPayload = FormProductsValidation.safeParse(payload);
+      const parsedPayload = FormGalleryValidation.safeParse(payload);
 
       if (parsedPayload.success) {
-        await addProduct(parsedPayload.data, pathname).then(() => {
-          toast.success("Success add products");
+        await addGallery(parsedPayload.data, pathname).then(() => {
+          toast.success("Success add gallery");
         });
       }
     } catch (error: any) {
@@ -123,7 +119,7 @@ export default function ModalAddProducts() {
       <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
         <SheetContent side={"bottom"} className="h-[80%] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Add Your Teams</SheetTitle>
+            <SheetTitle>Add Your Gallery</SheetTitle>
           </SheetHeader>
           <Form {...form}>
             <form
@@ -151,50 +147,10 @@ export default function ModalAddProducts() {
               />
 
               <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input type="number" placeholder="email" {...field} />
-                        {form.formState.errors.price && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.price?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descriptions</FormLabel>
-                    <FormControl>
-                      <>
-                        <Textarea placeholder="description" {...field} />
-                        {form.formState.errors.description && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.description?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
                 name="images"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Upload Product Images</FormLabel>
+                    <FormLabel>Upload Gallery Images</FormLabel>
                     <FormControl>
                       <>
                         <div className="">

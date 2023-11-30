@@ -6,7 +6,7 @@ import { SideBar } from "@/components/dashboard/side-bar";
 import { getCurrentUser } from "@/hooks/getCurrentUser";
 import { openSans } from "@/components/ui/fonts";
 import { BottomBar } from "@/components/dashboard/bottom-bar";
-import { ModalProvider } from "@/components/modal/modal-provider";
+import { ModalProvider } from "@/components/dashboard/modal/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 export const metadata: Metadata = {
   title: "Create Next App",

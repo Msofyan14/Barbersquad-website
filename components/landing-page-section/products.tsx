@@ -3,9 +3,9 @@
 import React from "react";
 import { HeadingSection } from "./heading-section";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ChevronDown, ChevronUp, Eye } from "lucide-react";
-import { alice } from "./ui/fonts";
+import { alice } from "../ui/fonts";
 import { IProducts } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

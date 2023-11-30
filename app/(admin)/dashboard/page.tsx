@@ -1,5 +1,5 @@
 import React from "react";
-import { DashboardCardOverview } from "@/components/dashboard-card-overview";
+import { DashboardCardOverview } from "@/components/landing-page-section/dashboard-card-overview";
 import { getProducts } from "@/lib/actions/products.actions";
 import { getTeams } from "@/lib/actions/teams.actions";
 import { getGallery } from "@/lib/actions/gallery.actions";

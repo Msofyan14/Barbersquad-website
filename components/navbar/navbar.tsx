@@ -26,7 +26,7 @@ export function Navbar() {
       <div className=" max-w-[1440px] mx-auto ">
         <div className="flex flex-row px-6 lg:px-20 py-3 md:py-5 items-center justify-between ">
           <div className="relative w-[60px]  md:w-[80px] h-[60px] md:h-[80px]">
-            <Image src="/logo.svg" fill alt="logo" />
+            <Image src="/logo.svg" fill alt="logo" priority />
           </div>
           <div className="hidden md:flex gap-x-5 lg:gap-x-[30px]">
             {navbarLink.map((nav) => (

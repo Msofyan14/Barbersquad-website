@@ -1,5 +1,5 @@
 import React from "react";
-import { alice, allison } from "./ui/fonts";
+import { alice, allison } from "../ui/fonts";
 import Image from "next/image";
 import { services } from "@/constants";
 

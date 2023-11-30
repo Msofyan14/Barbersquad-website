@@ -4,7 +4,7 @@ import React from "react";
 import { HeadingSection } from "./heading-section";
 import { ourTeams } from "@/constants";
 import Image from "next/image";
-import { alice } from "./ui/fonts";
+import { alice } from "../ui/fonts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 
