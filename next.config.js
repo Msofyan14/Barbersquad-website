@@ -12,6 +12,7 @@ const nextConfig = {
       },
     ],
   },
+  // optimizeFonts: false,
   // ignoreBuildErrors: true,
 };
 

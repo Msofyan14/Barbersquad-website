@@ -29,7 +29,7 @@ export function ModalDetailProducts() {
             <DialogTitle>Detail Products</DialogTitle>
           </DialogHeader>
 
-          <div className="flex max-md:flex-col max-sm:gap-y-3  gap-x-5  ">
+          <div className="flex  max-md:flex-col max-sm:gap-y-3  gap-x-5  ">
             <div className="flex flex-col gap-y-3">
               <div className="relative w-full h-[160px]  md:h-[320px]  ">
                 <Image
@@ -74,7 +74,7 @@ export function ModalDetailProducts() {
               </div>
             </div>
 
-            <div className=" flex flex-col justify-between">
+            <div className=" flex flex-1 flex-col justify-between">
               <div className="w-full">
                 <h1 className="font-semibold text-xl md:text-3xl">
                   {productById?.name}

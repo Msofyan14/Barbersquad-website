@@ -54,8 +54,7 @@ export function NavbarSheet() {
             {navbarLink.map((nav) => (
               <ul key={nav.id}>
                 <li
-                  className={`${
-                    aluminSans.className
+                  className={`${aluminSans.className}
                   } p-1 uppercase text-neutral-50 text-xl lg:text-[32px] cursor-pointer group hover:bg-white hover:text-neutral-950  hover:rounded hover:px-1 hover:py-0.5  transition-transform ${
                     active === nav.id &&
                     "bg-secondary text-neutral-950  rounded px-2 py-1 transform transition"

@@ -16,7 +16,7 @@ export function HeadingSection({
       </h1>
 
       <h1
-        className={`${alice.className} ${textColor} text-[32px]  md:text-[48px] md:-mt-7 -mt-6`}
+        className={`${alice.className}  ${textColor} text-[32px]  md:text-[48px] md:-mt-7 -mt-6`}
       >
         {title}
       </h1>
