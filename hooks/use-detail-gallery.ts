@@ -6,7 +6,7 @@ type TEditGalleryStore = {
   onOpen: () => void;
   onClose: () => void;
   galleryById: IGallery | undefined;
-  setDetailGallery: (value: IGallery) => void;
+  setDetailGallery: (value: IGallery | undefined) => void;
 };
 
 export const useDetailGallery = create<TEditGalleryStore>((set) => ({

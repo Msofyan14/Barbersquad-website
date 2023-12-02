@@ -17,7 +17,7 @@ export function DashboardCardOverview({
 }: IDashboardCardOverview) {
   return (
     <div className="">
-      <Link href={link}>
+      <Link aria-label="this link to navigate your page" href={link}>
         <div className="flex flex-col gap-y-3 items-center  rounded-lg bg-neutral-300 p-3 w-[250px] cursor-pointer">
           <Image src={icon} width={50} height={50} alt="icon" />
           <p className="font-semibold text-4xl">{totalItem}</p>

@@ -31,13 +31,14 @@ export function ModalDetailProducts() {
 
           <div className="flex  max-md:flex-col max-sm:gap-y-3  gap-x-5  ">
             <div className="flex flex-col gap-y-3">
-              <div className="relative w-full h-[160px]  md:h-[320px]  ">
+              <div className="relative w-full md:w-[360px] h-[160px]  md:h-[320px] shadow-md  ">
                 <Image
                   src={
                     productById?.images[firstImage] || "/image-placeholder.png"
                   }
                   className="object-cover "
                   fill
+                  priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   alt="gallery"
                 />
@@ -50,21 +51,21 @@ export function ModalDetailProducts() {
                     <div
                       key={index}
                       onClick={() => setFirstImage(index)}
-                      className={` relative  cursor-pointer 
+                      className={`relative  h-full  cursor-pointer 
+                      ${productById.images.length === 1 && "hidden"}
                     `}
                     >
                       <Image
-                        className={`object-cover   `}
-                        src={img || "/image-placeholder.png"}
+                        className={`object-cover h-full`}
+                        src={img}
                         width={80}
                         height={80}
-                        alt="gallery"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        alt="products"
                       />
                       {isSelected && (
                         <div
-                          className={`absolute inset-0 bg-neutral-950/60
-                        border-double border-[3px] border-slate-500
-                        
+                          className={`absolute inset-0 bg-neutral-950/60                        
                         `}
                         ></div>
                       )}

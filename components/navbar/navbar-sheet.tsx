@@ -36,7 +36,11 @@ export function NavbarSheet() {
         <SheetContent className="bg-neutral-950 border-none">
           <SheetHeader>
             <div className="mt-5">
-              <Link href="https://wa.me/+6285691534089" target="_blank">
+              <Link
+                aria-label="this link to navigate to our whatsapp "
+                href="https://wa.me/+6285691534089"
+                target="_blank"
+              >
                 <Button
                   variant="secondary"
                   className={`${aluminSans.className} uppercase  text-2xl lg:text-[32px] `}

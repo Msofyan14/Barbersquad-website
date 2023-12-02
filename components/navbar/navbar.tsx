@@ -46,7 +46,11 @@ export function Navbar() {
             ))}
           </div>
           <div className="hidden md:block">
-            <Link href="https://wa.me/+6285691534089" target="_blank">
+            <Link
+              aria-label="this link to navigate to our whatsapp "
+              href="https://wa.me/+6285691534089"
+              target="_blank"
+            >
               <Button
                 variant="ghost"
                 className={`${aluminSans.className} uppercase text-white text-xl lg:text-[32px] `}
