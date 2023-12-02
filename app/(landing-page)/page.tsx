@@ -30,10 +30,16 @@ export default async function Home({
       <Suspense fallback={<CardOurTeamsSkeleton />}>
         <OurTeams />
       </Suspense>
-      <Suspense key={limitGallery} fallback={<CardGallerySkeleton />}>
+      <Suspense
+        key={`gallery=${limitGallery}`}
+        fallback={<CardGallerySkeleton />}
+      >
         <Gallery limitGallery={limitGallery} />
       </Suspense>
-      <Suspense key={limitProducts} fallback={<CardProductsSkeleton />}>
+      <Suspense
+        key={`products=${limitProducts}`}
+        fallback={<CardProductsSkeleton />}
+      >
         <Products limitProducts={limitProducts} />
       </Suspense>
       <AboutUs />

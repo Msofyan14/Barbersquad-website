@@ -16,6 +16,7 @@ export function BottomBar() {
 
           return (
             <Link
+              aria-label="this link to navigate your page"
               href={link.href}
               key={link.title}
               className={`bottombar_link text-neutral-50 ${

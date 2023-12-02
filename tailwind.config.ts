@@ -20,12 +20,12 @@ module.exports = {
     },
 
     extend: {
-      fontFamily: {
-        alumniSans: ["Alumni Sans", "sans-serif"],
-        alice: ["Alice", "serif"],
-        allison: ["Allison", "cursive"],
-        openSans: ["Open Sans", "sans-serif"],
-      },
+      // fontFamily: {
+      //   alumniSans: ["Alumni Sans", "sans-serif"],
+      //   alice: ["Alice", "serif"],
+      //   allison: ["Allison", "cursive"],
+      //   openSans: ["Open Sans", "sans-serif"],
+      // },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

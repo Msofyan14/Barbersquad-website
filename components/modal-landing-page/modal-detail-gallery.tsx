@@ -12,12 +12,13 @@ import Image from "next/image";
 import { useState } from "react";
 
 export function ModalDetailGallery() {
-  const { isOpen, onClose, galleryById } = useDetailGallery();
+  const { isOpen, onClose, galleryById, setDetailGallery } = useDetailGallery();
 
   const [firstImage, setFirstImage] = useState(0);
 
   const handleClose = () => {
     setFirstImage(0);
+    setDetailGallery(undefined);
     onClose();
   };
 
@@ -30,19 +31,21 @@ export function ModalDetailGallery() {
             <DialogDescription>{galleryById?.name}</DialogDescription>
           </DialogHeader>
 
-          <div className="flex max-sm:flex-col max-sm:gap-y-3  gap-x-3 ">
-            <div className="relative w-full h-[220px] sm:h-full md:h-[420px] ">
+          <div className="flex  max-md:flex-col max-md:gap-y-3  gap-x-3 ">
+            <div className="relative w-full h-[220px]  md:h-[550px]  shadow-md ">
               <Image
                 src={
-                  galleryById?.images[firstImage] || "/image-placeholder.png"
+                  galleryById?.images[firstImage] ||
+                  "/image-filled-placeholder.svg"
                 }
-                className="object-cover"
+                className="object-cover "
                 fill
+                priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="gallery"
               />
             </div>
-            <div className="max-sm:flex-row flex flex-col items-center max-sm:gap-x-3 gap-y-3 overflow-x-auto ">
+            <div className="max-md:flex-row flex flex-col items-center max-md:gap-x-3 gap-y-3 overflow-x-auto ">
               {galleryById?.images.map((img, index) => {
                 const isSelected = firstImage === index;
 
@@ -50,20 +53,24 @@ export function ModalDetailGallery() {
                   <div
                     key={index}
                     onClick={() => setFirstImage(index)}
-                    className={` relative h-full cursor-pointer 
+                    className={` relative h-full  md:h-[96px] cursor-pointer
+                    
+                    ${galleryById.images.length === 1 && "hidden"}
                     `}
                   >
                     <Image
-                      className={`object-cover h-full `}
-                      src={img || "/image-placeholder.png"}
-                      width={100}
+                      className={`object-cover w-full h-full `}
+                      src={img}
+                      width={80}
                       height={80}
+                      priority
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       alt="gallery"
                     />
                     {isSelected && (
                       <div
                         className={`absolute inset-0 bg-neutral-950/60
-                        border-double border-[3px] border-slate-500
+                       
                         
                         `}
                       ></div>

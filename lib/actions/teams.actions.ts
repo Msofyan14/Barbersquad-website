@@ -17,7 +17,7 @@ export async function getTeams({
   pageNumber = 1,
   pageSize = 10,
 }: TGetTeams) {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
 
   try {
     connectToDB();

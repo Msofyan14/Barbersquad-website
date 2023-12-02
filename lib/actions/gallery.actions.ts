@@ -63,6 +63,8 @@ export async function getGallery({
 }
 
 export async function getGalleryByid(id: string | undefined) {
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
+
   try {
     connectToDB();
 

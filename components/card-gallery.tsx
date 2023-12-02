@@ -27,7 +27,7 @@ export function CardGallery({ data, totalImages }: IGalleryProps) {
 
   const handleShowMore = async () => {
     if (!galleryParams || +galleryParams < totalImages) {
-      params.set("gallery", (valueGallery + 2).toString());
+      params.set("gallery", (valueGallery + 6).toString());
     } else {
       params.delete("gallery");
 
@@ -42,8 +42,8 @@ export function CardGallery({ data, totalImages }: IGalleryProps) {
   };
 
   const handleOpenDetailGallery = async (id: string | undefined) => {
-    onOpen();
     try {
+      onOpen();
       const detailGallery = await getGalleryByid(id);
 
       if (!detailGallery) {

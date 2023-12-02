@@ -28,6 +28,7 @@ export function SideBar() {
             } `}
           >
             <Link
+              aria-label="this link to navigate your page"
               href={link.href}
               className={`flex gap-x-2 text-center text-sm  ${
                 isActive && "bg-neutral-700 rounded-lg p-2 "
