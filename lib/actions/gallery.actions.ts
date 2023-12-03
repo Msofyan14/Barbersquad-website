@@ -2,7 +2,6 @@
 import { connectToDB } from "../mongoose";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
-import Products from "../model/products.model";
 import { IGallery } from "@/types";
 import Gallery from "../model/gallery.model";
 
@@ -63,7 +62,7 @@ export async function getGallery({
 }
 
 export async function getGalleryByid(id: string | undefined) {
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 
   try {
     connectToDB();

@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { IGallery } from "@/types";
-import { useModalProvider } from "@/hooks/use-modal-provider";
 
 interface IGalleryProps {
   data: IGallery[];
@@ -16,9 +15,7 @@ interface IGalleryProps {
 }
 
 export function CardGallery({ data, totalImages }: IGalleryProps) {
-  const { onOpen, setDetailGallery } = useDetailGallery();
-
-  const modalProvider = useModalProvider();
+  const { onOpen, setDetailGallery, onLoading, onLoaded } = useDetailGallery();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -46,8 +43,9 @@ export function CardGallery({ data, totalImages }: IGalleryProps) {
 
   const handleOpenDetailGallery = async (id: string | undefined) => {
     try {
-      modalProvider.onOpen();
       onOpen();
+      onLoading();
+
       const detailGallery = await getGalleryByid(id);
 
       if (!detailGallery) {
@@ -57,6 +55,8 @@ export function CardGallery({ data, totalImages }: IGalleryProps) {
       setDetailGallery(detailGallery);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      onLoaded();
     }
   };
 

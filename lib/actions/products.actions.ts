@@ -16,7 +16,7 @@ export async function getProducts({
   pageNumber = 1,
   pageSize = 10,
 }: TGetTeams) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
 
   try {
     connectToDB();
@@ -62,6 +62,8 @@ export async function getProducts({
 }
 
 export async function getProductByid(id: string | undefined) {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
   try {
     connectToDB();
 

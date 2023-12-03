@@ -11,6 +11,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { IProducts } from "@/types";
 import { useEditProducts } from "@/hooks/use-edit-products";
 import { deleteProduct, getProductByid } from "@/lib/actions/products.actions";
+import { NumericFormat } from "react-number-format";
 
 interface IColumns {
   page: number;
@@ -82,7 +83,13 @@ export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
         header: "Price",
         cell: ({ row }) => (
           <div className="capitalize max-md:text-xs">
-            Rp. {row.getValue("price")}
+            <NumericFormat
+              prefix="Rp. "
+              value={row.getValue("price")}
+              displayType="text"
+              thousandSeparator="."
+              decimalSeparator=","
+            />
           </div>
         ),
       },

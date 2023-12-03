@@ -9,6 +9,7 @@ import { getProductByid } from "@/lib/actions/products.actions";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { alice } from "./ui/fonts";
+import { NumericFormat } from "react-number-format";
 
 interface IProductsProps {
   data: IProducts[];
@@ -16,7 +17,7 @@ interface IProductsProps {
 }
 
 export function CardProducts({ data, totalProducts }: IProductsProps) {
-  const { onOpen, setDetailProduct } = useDetailProducts();
+  const { onOpen, setDetailProduct, onLoading, onLoaded } = useDetailProducts();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -43,17 +44,20 @@ export function CardProducts({ data, totalProducts }: IProductsProps) {
   };
 
   const handleOpenDetailProducts = async (id: string | undefined) => {
-    onOpen();
     try {
-      const detailGallery = await getProductByid(id);
+      onOpen();
+      onLoading();
+      const detailProducts = await getProductByid(id);
 
-      if (!detailGallery) {
+      if (!detailProducts) {
         toast.error("failed retrieve details gallery");
       }
 
-      setDetailProduct(detailGallery);
+      setDetailProduct(detailProducts);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      onLoaded();
     }
   };
 
@@ -95,7 +99,15 @@ export function CardProducts({ data, totalProducts }: IProductsProps) {
               rounded-b-lg py-1 `}
             >
               <h1 className=" text-sm md:text-xl">{product.name}</h1>
-              <h1 className=" text-sm md:text-xl">Rp. {product.price}</h1>
+              <h1 className=" text-sm md:text-xl">
+                <NumericFormat
+                  prefix="Rp. "
+                  value={product.price}
+                  displayType="text"
+                  thousandSeparator="."
+                  decimalSeparator=","
+                />
+              </h1>
             </div>
           </div>
         ))}
