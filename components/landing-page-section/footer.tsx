@@ -21,7 +21,7 @@ export function Footer() {
           <p className="font-semibold text-4xl">Our Socials</p>
           <div className="flex flex-wrap gap-x-3">
             <Link
-              aria-label="this link to navigate to our sosial media "
+              aria-label="Instagram"
               href="https://www.instagram.com/barbersquad.id/"
               target="_blank"
             >
@@ -30,7 +30,7 @@ export function Footer() {
               </Button>
             </Link>
             <Link
-              aria-label="this link to navigate to our whatsapp "
+              aria-label="Calling"
               href="https://wa.me/+6285691534089"
               target="_blank"
             >
