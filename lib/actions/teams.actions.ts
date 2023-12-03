@@ -83,6 +83,8 @@ export async function addTeams(data: ITeams, pathname: string) {
 }
 
 export async function getTeamByid(id: string) {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+
   try {
     connectToDB();
 

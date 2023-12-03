@@ -42,7 +42,7 @@ import { useEditProducts } from "@/hooks/use-edit-products";
 type ProductValidation = z.infer<typeof FormProductsValidation>;
 
 export default function ModalEditProducts() {
-  const { productById, isOpen, onClose } = useEditProducts();
+  const { productById, isOpen, isLoading, onClose } = useEditProducts();
 
   const form = useForm<ProductValidation>({
     resolver: zodResolver(FormProductsValidation),
@@ -219,119 +219,123 @@ export default function ModalEditProducts() {
             <SheetTitle>Edit Your Product</SheetTitle>
           </SheetHeader>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 max-w-xl mx-auto  "
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input placeholder="name" {...field} />
-                        {form.formState.errors.name && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.name?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input type="number" placeholder="email" {...field} />
-                        {form.formState.errors.price && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.price?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descriptions</FormLabel>
-                    <FormControl>
-                      <>
-                        <Textarea placeholder="description" {...field} />
-                        {form.formState.errors.description && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.description?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Product Images</FormLabel>
-                    <FormControl>
-                      <>
-                        <div className="">
-                          <MultiFileDropzone
-                            {...field}
-                            className="w-full"
-                            value={fileStates}
-                            dropzoneOptions={{
-                              maxFiles: 4,
-                              maxSize: 1024 * 1024 * 1, // 1 MB
-                            }}
-                            onChange={setFileStates}
-                            onFilesAdded={async (addedFiles) => {
-                              setFileStates([...fileStates, ...addedFiles]);
-                            }}
-                          />
-                        </div>
-                        {form.formState.errors.images && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.images?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                disabled={form.formState.isSubmitting}
-                className="w-full disabled:bg-primary/90 "
-                type="submit"
+            {isLoading ? (
+              <Loader2 className="animate-spin w-8 h-8 max-w-xl mx-auto mt-[120px]" />
+            ) : (
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8 max-w-xl mx-auto  "
               >
-                {form.formState.isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                    Submitting
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input placeholder="name" {...field} />
+                          {form.formState.errors.name && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.name?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input type="number" placeholder="email" {...field} />
+                          {form.formState.errors.price && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.price?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Descriptions</FormLabel>
+                      <FormControl>
+                        <>
+                          <Textarea placeholder="description" {...field} />
+                          {form.formState.errors.description && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.description?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Upload Product Images</FormLabel>
+                      <FormControl>
+                        <>
+                          <div className="">
+                            <MultiFileDropzone
+                              {...field}
+                              className="w-full"
+                              value={fileStates}
+                              dropzoneOptions={{
+                                maxFiles: 4,
+                                maxSize: 1024 * 1024 * 1, // 1 MB
+                              }}
+                              onChange={setFileStates}
+                              onFilesAdded={async (addedFiles) => {
+                                setFileStates([...fileStates, ...addedFiles]);
+                              }}
+                            />
+                          </div>
+                          {form.formState.errors.images && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.images?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  className="w-full disabled:bg-primary/90 "
+                  type="submit"
+                >
+                  {form.formState.isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                      Submitting
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </form>
+            )}
           </Form>
         </SheetContent>
       </Sheet>

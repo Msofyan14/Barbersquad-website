@@ -22,17 +22,20 @@ interface IColumns {
 export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
 
-  const { setGallery, onOpen } = useEditGallery();
+  const { setGallery, onOpen, onLoading, onLoaded } = useEditGallery();
 
   const { edgestore } = useEdgeStore();
 
   const handleGetGalleryById = async (id: string) => {
     try {
       onOpen();
+      onLoading();
       const res = await getGalleryByid(id);
       setGallery(res);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      onLoaded();
     }
   };
 
@@ -83,7 +86,7 @@ export const ColumnGalery = ({ page, limit, data, pageCount }: IColumns) => {
         header: "Images",
         cell: ({ row }) => (
           <div className="">
-            <div className="flex justify-center items-center gap-x-2 ">
+            <div className="flex overflow-x-auto md:justify-center items-center gap-x-2 ">
               {row.original.images.map((image, index) => (
                 <Image
                   key={index}

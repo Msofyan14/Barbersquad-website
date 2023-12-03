@@ -37,7 +37,7 @@ export default function ModalEditTeams() {
   const { edgestore } = useEdgeStore();
 
   const pathname = usePathname();
-  const modal = useEditTeams();
+  const { isOpen, onClose, isLoading } = useEditTeams();
   const { teamByid } = useEditTeams();
 
   const form = useForm<TeamsValidation>({
@@ -56,10 +56,10 @@ export default function ModalEditTeams() {
     setFile(teamByid?.image);
   }, [teamByid]);
 
-  const onClose = () => {
+  const handleOnClose = () => {
     setFile(undefined);
     form.reset();
-    modal.onClose();
+    onClose();
   };
 
   const onSubmit: SubmitHandler<TeamsValidation> = async (data) => {
@@ -111,13 +111,13 @@ export default function ModalEditTeams() {
     } catch (error: any) {
       toast.error(error.message);
     } finally {
-      onClose();
+      handleOnClose();
     }
   };
 
   return (
     <div>
-      <Sheet open={modal.isOpen} onOpenChange={modal.onClose}>
+      <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent
           side={"bottom"}
           className="h-[80%] overflow-y-auto transition duration-300"
@@ -126,117 +126,121 @@ export default function ModalEditTeams() {
             <SheetTitle>Edit Your Teams</SheetTitle>
           </SheetHeader>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 max-w-xl mx-auto  "
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input placeholder="name" {...field} />
-                        {form.formState.errors.name && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.name?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input placeholder="email" {...field} />
-                        {form.formState.errors.email && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.email?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="whatsapp"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Whastapp</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input
-                          type="number"
-                          placeholder="whatsapp"
-                          {...field}
-                        />
-                        {form.formState.errors.whatsapp && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.whatsapp?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Profile Image</FormLabel>
-                    <FormControl>
-                      <>
-                        <SingleImageDropzone
-                          {...field}
-                          className="w-full"
-                          value={file}
-                          onChange={(file) => {
-                            setFile(file);
-                            form.setValue("image", file?.name!);
-                          }}
-                        />
-                        {form.formState.errors.image && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.image?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                disabled={form.formState.isSubmitting}
-                className="w-full disabled:bg-primary/90 "
-                type="submit"
+            {isLoading ? (
+              <Loader2 className="animate-spin w-8 h-8 max-w-xl mx-auto mt-[120px]" />
+            ) : (
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8 max-w-xl mx-auto  "
               >
-                {form.formState.isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                    Editing
-                  </>
-                ) : (
-                  "Edit"
-                )}
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input placeholder="name" {...field} />
+                          {form.formState.errors.name && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.name?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input placeholder="email" {...field} />
+                          {form.formState.errors.email && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.email?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="whatsapp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Whastapp</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input
+                            type="number"
+                            placeholder="whatsapp"
+                            {...field}
+                          />
+                          {form.formState.errors.whatsapp && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.whatsapp?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Upload Profile Image</FormLabel>
+                      <FormControl>
+                        <>
+                          <SingleImageDropzone
+                            {...field}
+                            className="w-full"
+                            value={file}
+                            onChange={(file) => {
+                              setFile(file);
+                              form.setValue("image", file?.name!);
+                            }}
+                          />
+                          {form.formState.errors.image && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.image?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  className="w-full disabled:bg-primary/90 "
+                  type="submit"
+                >
+                  {form.formState.isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                      Editing
+                    </>
+                  ) : (
+                    "Edit"
+                  )}
+                </Button>
+              </form>
+            )}
           </Form>
         </SheetContent>
       </Sheet>

@@ -36,7 +36,7 @@ import { editGallery } from "@/lib/actions/gallery.actions";
 type GalleryValidation = z.infer<typeof FormGalleryValidation>;
 
 export default function ModalEditGallery() {
-  const { galleryById, isOpen, onClose } = useEditGallery();
+  const { galleryById, isOpen, onClose, isLoading } = useEditGallery();
 
   const form = useForm<GalleryValidation>({
     resolver: zodResolver(FormGalleryValidation),
@@ -202,85 +202,90 @@ export default function ModalEditGallery() {
           <SheetHeader>
             <SheetTitle>Edit Your Gallery</SheetTitle>
           </SheetHeader>
+
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 max-w-xl mx-auto  "
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <>
-                        <Input placeholder="name" {...field} />
-                        {form.formState.errors.name && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.name?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Gallery Images</FormLabel>
-                    <FormControl>
-                      <>
-                        <div className="">
-                          <MultiFileDropzone
-                            className="w-full"
-                            value={fileStates}
-                            dropzoneOptions={{
-                              maxFiles: 4,
-                              maxSize: 1024 * 1024 * 1, // 1 MB
-                            }}
-                            onChange={setFileStates}
-                            onFilesAdded={async (addedFiles) => {
-                              addedFiles.forEach((file) => {
-                                form.setValue("images", [
-                                  ...form.getValues().images,
-                                  file?.file.name,
-                                ]);
-                              });
-
-                              setFileStates([...fileStates, ...addedFiles]);
-                            }}
-                          />
-                        </div>
-                        {form.formState.errors.images && (
-                          <p className="text-sm text-red-500">
-                            {form.formState.errors.images?.message}
-                          </p>
-                        )}
-                      </>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                disabled={form.formState.isSubmitting}
-                className="w-full disabled:bg-primary/90 "
-                type="submit"
+            {isLoading ? (
+              <Loader2 className="animate-spin w-8 h-8 max-w-xl mx-auto mt-[120px]" />
+            ) : (
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8 max-w-xl mx-auto  "
               >
-                {form.formState.isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                    Submitting
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <>
+                          <Input placeholder="name" {...field} />
+                          {form.formState.errors.name && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.name?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  name="images"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Upload Gallery Images</FormLabel>
+                      <FormControl>
+                        <>
+                          <div className="">
+                            <MultiFileDropzone
+                              className="w-full"
+                              value={fileStates}
+                              dropzoneOptions={{
+                                maxFiles: 4,
+                                maxSize: 1024 * 1024 * 1, // 1 MB
+                              }}
+                              onChange={setFileStates}
+                              onFilesAdded={async (addedFiles) => {
+                                addedFiles.forEach((file) => {
+                                  form.setValue("images", [
+                                    ...form.getValues().images,
+                                    file?.file.name,
+                                  ]);
+                                });
+
+                                setFileStates([...fileStates, ...addedFiles]);
+                              }}
+                            />
+                          </div>
+                          {form.formState.errors.images && (
+                            <p className="text-sm text-red-500">
+                              {form.formState.errors.images?.message}
+                            </p>
+                          )}
+                        </>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  className="w-full disabled:bg-primary/90 "
+                  type="submit"
+                >
+                  {form.formState.isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                      Submitting
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </form>
+            )}
           </Form>
         </SheetContent>
       </Sheet>
