@@ -62,7 +62,7 @@ export async function getProducts({
 }
 
 export async function getProductByid(id: string | undefined) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
 
   try {
     connectToDB();

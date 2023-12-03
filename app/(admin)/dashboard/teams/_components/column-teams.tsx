@@ -22,16 +22,19 @@ interface IColumns {
 
 export const ColumnTeams = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
-  const modal = useEditTeams();
+  const { onOpen, setUserData, onLoading, onLoaded } = useEditTeams();
   const { edgestore } = useEdgeStore();
 
   const handleGetTeamById = async (id: string) => {
     try {
-      modal.onOpen();
+      onOpen();
+      onLoading();
       const res = await getTeamByid(id);
-      modal.setUserData(res);
+      setUserData(res);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      onLoaded();
     }
   };
 

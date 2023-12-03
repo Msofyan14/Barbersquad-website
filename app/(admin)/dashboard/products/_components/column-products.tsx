@@ -22,17 +22,20 @@ interface IColumns {
 
 export const ColumnProducts = ({ page, limit, data, pageCount }: IColumns) => {
   const pathname = usePathname();
-  const { setProducts, onOpen } = useEditProducts();
+  const { setProducts, onOpen, onLoading, onLoaded } = useEditProducts();
 
   const { edgestore } = useEdgeStore();
 
   const handleGetProductById = async (id: string) => {
     try {
       onOpen();
+      onLoading();
       const res = await getProductByid(id);
       setProducts(res);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      onLoaded();
     }
   };
 
