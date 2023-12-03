@@ -86,6 +86,21 @@ export function CardGallerySkeleton() {
   );
 }
 
+export function ModalDetailGallerySkeleton() {
+  return (
+    <div className="flex justify-between  max-md:flex-col max-md:gap-y-3  gap-x-3">
+      <Skeleton className=" relative w-full md:w-[600px] h-[220px]  md:h-[550px] " />
+      <div className="max-md:flex-row flex flex-col items-center max-md:gap-x-3 gap-y-3">
+        {[...Array(4)].map((_, index) => (
+          <div key={index} className="">
+            <Skeleton className="h-[65px] w-[65px] md:h-[100px] md:w-[100px]" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function CardProductsSkeleton() {
   return (
     <div className="section-wrapper">
@@ -100,6 +115,45 @@ export function CardProductsSkeleton() {
             <Skeleton className=" relative mt-3 md:w-full h-[70px] " />
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+export function ModalDetailProductsSkeleton() {
+  return (
+    <div className="">
+      <div className="flex  max-md:flex-col max-sm:gap-y-3  gap-x-5">
+        <div className="flex flex-col gap-y-3">
+          <Skeleton className=" relative w-full md:w-[360px] h-[160px]  md:h-[320px]" />
+
+          <div className="flex items-center gap-x-3 overflow-x-auto">
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="">
+                <Skeleton
+                  className={`h-[65px] w-[65px] md:h-[80px] md:w-[80px]`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className=" flex flex-1 flex-col justify-between">
+          <div className="w-full">
+            <Skeleton className="h-8 w-[250px] my-3" />
+            <Skeleton className="h-8 w-[200px] my-3" />
+            <Skeleton className="h-8 w-[150px] my-3 mb-3 md:mb-8" />
+
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="">
+                <Skeleton className={`h-3 w-[250px] my-3`} />
+                <Skeleton className={`hidden md:block h-3 w-[300px]`} />
+              </div>
+            ))}
+          </div>
+
+          <Skeleton className="h-10 w-[300px] md:w-[320px]" />
+        </div>
       </div>
     </div>
   );

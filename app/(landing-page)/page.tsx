@@ -14,24 +14,6 @@ import {
   CardProductsSkeleton,
 } from "@/components/LoadingSkeleton";
 
-import dynamic from "next/dynamic";
-
-// const ModalLandingPageProvider = dynamic(() => import('../../components/modal-landing-page/modal-landing-page-provider'), { ssr: false , loading : () => <p>Loading...</p>,})
-
-const DynamicGallery = dynamic(
-  () => import("../../components/landing-page-section/gallery"),
-  {
-    loading: () => <CardGallerySkeleton />,
-  }
-);
-
-const DynamicProducts = dynamic(
-  () => import("../../components/landing-page-section/products"),
-  {
-    loading: () => <CardProductsSkeleton />,
-  }
-);
-
 export default async function Home({
   searchParams,
 }: {
@@ -52,22 +34,19 @@ export default async function Home({
         key={`gallery=${limitGallery}`}
         fallback={<CardGallerySkeleton />}
       >
-        <DynamicGallery limitGallery={limitGallery} />
-        {/* <Gallery limitGallery={limitGallery} /> */}
+        <Gallery limitGallery={limitGallery} />
       </Suspense>
       <Suspense
         key={`products=${limitProducts}`}
         fallback={<CardProductsSkeleton />}
       >
-        <DynamicProducts limitProducts={limitProducts} />
-        {/* <Products limitProducts={limitProducts} /> */}
+        <Products limitProducts={limitProducts} />
       </Suspense>
       <AboutUs />
       <div className="bg-neutral-950">
         <Address />
         <Footer />
       </div>
-      {/* <ModalLandingPageProvider /> */}
     </main>
   );
 }
