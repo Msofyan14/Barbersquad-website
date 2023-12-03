@@ -130,6 +130,8 @@ export async function editTeam({ id, data, pathname }: TEditTeams) {
 }
 
 export async function deleteTeam(id: string, pathname: string) {
+  console.log(id);
+
   try {
     connectToDB();
 

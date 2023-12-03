@@ -37,7 +37,7 @@ export function NavbarSheet() {
           <SheetHeader>
             <div className="mt-5">
               <Link
-                aria-label="this link to navigate to our whatsapp "
+                aria-label="Calling"
                 href="https://wa.me/+6285691534089"
                 target="_blank"
               >
