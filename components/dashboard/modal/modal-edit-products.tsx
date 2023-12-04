@@ -92,24 +92,15 @@ export default function ModalEditProducts() {
 
   const handleOnClose = () => {
     form.reset();
+    setFileStates([]);
     onClose();
   };
-
-  const existImage = productById?.images;
-  const currentImage = fileStates
-    .filter((file) => file.url !== undefined)
-    .map((link) => link.url);
-  const nonExistingImages = existImage?.filter(
-    (url) => !currentImage.includes(url)
-  );
-
-  console.log(nonExistingImages);
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     try {
       const urlImage = fileStates.map((file) => file.url);
       const existImage = productById?.images;
-      const isFileToUpdload = fileStates.map((file) => file.file);
+      const isFileToUpdload = fileStates.filter((file) => file.file !== null);
       const currentImage = fileStates
         .filter((file) => file.url !== undefined)
         .map((link) => link.url);
@@ -123,6 +114,8 @@ export default function ModalEditProducts() {
         urlImage.every((value, index) => value === existImage[index]);
 
       if (isEqual) {
+        console.log("equal");
+
         const parsedPayload = FormProductsValidation.safeParse(data);
         if (parsedPayload.success) {
           await editProduct({
@@ -132,6 +125,44 @@ export default function ModalEditProducts() {
           }).then(() => {
             toast.success("Success Edit product");
           });
+        }
+      } else if (
+        currentImage.length > 0 &&
+        nonExistingImages &&
+        nonExistingImages.length > 0 &&
+        isFileToUpdload.length === 0
+      ) {
+        console.log("delete");
+        try {
+          await Promise.all(
+            nonExistingImages.map(async (img) => {
+              try {
+                await edgestore.publicFiles.delete({
+                  url: img,
+                });
+              } catch (error: any) {
+                toast.error(error.message);
+              }
+            })
+          );
+
+          const payload = {
+            ...data,
+            images: currentImage,
+          };
+
+          const parsedPayload = FormProductsValidation.safeParse(payload);
+          if (parsedPayload.success) {
+            await editProduct({
+              id: productById?._id,
+              data: parsedPayload.data,
+              pathname: pathname,
+            }).then(() => {
+              toast.success("Success Edit product");
+            });
+          }
+        } catch (error) {
+          console.log(error);
         }
       } else {
         const editedImage = await Promise.all(
