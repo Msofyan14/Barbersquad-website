@@ -84,6 +84,7 @@ export default function ModalEditGallery() {
 
   const handleOnClose = () => {
     form.reset();
+    setFileStates([]);
     onClose();
   };
 
@@ -112,8 +113,44 @@ export default function ModalEditGallery() {
             data: parsedPayload.data,
             pathname: pathname,
           }).then(() => {
-            toast.success("Success Edit product");
+            toast.success("Success Edit gallery");
           });
+        }
+      } else if (
+        currentImage &&
+        nonExistingImages &&
+        nonExistingImages.length > 0
+      ) {
+        try {
+          await Promise.all(
+            nonExistingImages.map(async (img) => {
+              try {
+                await edgestore.publicFiles.delete({
+                  url: img,
+                });
+              } catch (error: any) {
+                toast.error(error.message);
+              }
+            })
+          );
+
+          const payload = {
+            ...data,
+            images: currentImage,
+          };
+
+          const parsedPayload = FormGalleryValidation.safeParse(payload);
+          if (parsedPayload.success) {
+            await editGallery({
+              id: galleryById?._id,
+              data: parsedPayload.data,
+              pathname: pathname,
+            }).then(() => {
+              toast.success("Success Edit gallery");
+            });
+          }
+        } catch (error) {
+          console.log(error);
         }
       } else {
         const editedImage = await Promise.all(
@@ -182,7 +219,7 @@ export default function ModalEditGallery() {
             data: parsedPayload.data,
             pathname: pathname,
           }).then(() => {
-            toast.success("Success Edit products");
+            toast.success("Success Edit gallery");
           });
         }
       }
@@ -192,8 +229,6 @@ export default function ModalEditGallery() {
       handleOnClose();
     }
   };
-
-  console.log(fileStates);
 
   return (
     <div>
