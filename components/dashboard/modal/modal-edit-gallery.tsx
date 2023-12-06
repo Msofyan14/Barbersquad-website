@@ -92,7 +92,8 @@ export default function ModalEditGallery() {
     try {
       const urlImage = fileStates.map((file) => file.url);
       const existImage = galleryById?.images;
-      const isFileToUpdload = fileStates.map((file) => file.file);
+      const isFileToUpdload = fileStates.filter((file) => file.file !== null);
+
       const currentImage = fileStates
         .filter((file) => file.url !== undefined)
         .map((link) => link.url);
@@ -117,9 +118,10 @@ export default function ModalEditGallery() {
           });
         }
       } else if (
-        currentImage &&
+        currentImage.length > 0 &&
         nonExistingImages &&
-        nonExistingImages.length > 0
+        nonExistingImages.length > 0 &&
+        isFileToUpdload.length === 0
       ) {
         try {
           await Promise.all(
