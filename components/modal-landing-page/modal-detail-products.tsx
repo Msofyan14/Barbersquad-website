@@ -12,10 +12,13 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { NumericFormat } from "react-number-format";
 import { ModalDetailProductsSkeleton } from "../LoadingSkeleton";
+import { useRouter } from "next/navigation";
 
 export function ModalDetailProducts() {
   const { isOpen, onClose, productById, isLoading, setDetailProduct } =
     useDetailProducts();
+
+  const router = useRouter();
 
   const [firstImage, setFirstImage] = useState(0);
 
@@ -23,6 +26,22 @@ export function ModalDetailProducts() {
     setFirstImage(0);
     setDetailProduct(undefined);
     onClose();
+  };
+
+  const handleCheckout = () => {
+    const formattedPrice = productById?.price.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    const priceWithoutCents = formattedPrice?.replace(",00", "");
+    const formatOrder = "Hallo saya mau order products berikut :";
+    const orderProduct = `${formatOrder}\n Product : ${productById?.name}\n Price : ${priceWithoutCents} `;
+
+    const waLink = `https://wa.me/+6285691534089?text=${encodeURIComponent(
+      orderProduct
+    )}`;
+
+    router.push(waLink);
   };
 
   return (
@@ -103,7 +122,9 @@ export function ModalDetailProducts() {
                   </p>
                 </div>
                 <div className="max-md:pt-3">
-                  <Button className="w-full">Buy Now</Button>
+                  <Button onClick={handleCheckout} className="w-full">
+                    Buy Now
+                  </Button>
                 </div>
               </div>
             </div>
