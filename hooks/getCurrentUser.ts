@@ -1,6 +1,5 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getUserByEmail } from "@/lib/actions/users.actions";
-import { FormLoginValidation } from "@/lib/validations/types";
 import { getServerSession } from "next-auth";
 
 export async function getCurrentUser() {
@@ -17,7 +16,7 @@ export async function getCurrentUser() {
       return null;
     }
 
-    return currentUser;
+    return currentUser._doc;
   } catch (error) {
     console.log(error);
   }
