@@ -2,8 +2,6 @@ import { authenticate } from "@/lib/actions/users.actions";
 import { FormLoginValidation } from "@/lib/validations/types";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import jsonwebtoken from "jsonwebtoken";
-import { JWT } from "next-auth/jwt";
 
 export const options: NextAuthOptions = {
   providers: [
@@ -37,24 +35,6 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
-  // jwt: {
-  //   encode: ({ secret, token }) => {
-  //     const encodedToken = jsonwebtoken.sign(
-  //       {
-  //         ...token,
-  //         iss: "grafbase",
-  //         exp: Math.floor(Date.now() / 1000) + 60 * 60,
-  //       },
-  //       secret
-  //     );
-
-  //     return encodedToken;
-  //   },
-  //   decode: async ({ secret, token }) => {
-  //     const decodedToken = jsonwebtoken.verify(token!, secret);
-  //     return decodedToken as JWT;
-  //   },
-  // },
 
   callbacks: {
     async jwt({ token, user }) {
