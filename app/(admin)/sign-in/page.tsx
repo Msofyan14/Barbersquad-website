@@ -56,6 +56,7 @@ function SignIn() {
         <Image
           className="mx-auto my-8"
           src="/logo.svg"
+          priority
           width={100}
           height={100}
           alt="logo"

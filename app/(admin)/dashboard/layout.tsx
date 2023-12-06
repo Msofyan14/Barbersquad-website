@@ -22,8 +22,6 @@ export default async function DashboardLayout({
 }) {
   const currentUser = await getCurrentUser();
 
-  console.log(currentUser);
-
   return (
     <section className={`${openSans.className} antialiased flex`}>
       <Toaster position="top-center" richColors />
