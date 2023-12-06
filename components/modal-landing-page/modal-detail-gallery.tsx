@@ -37,7 +37,7 @@ export function ModalDetailGallery() {
             <ModalDetailGallerySkeleton />
           ) : (
             <div className="flex  max-md:flex-col max-md:gap-y-3  gap-x-3 ">
-              <div className="relative w-full h-[220px]  md:h-[550px]  shadow-md ">
+              <div className="relative w-full h-[220px]  md:h-[500px]  shadow-md ">
                 {galleryById?.images && (
                   <Image
                     src={galleryById?.images[firstImage]}
